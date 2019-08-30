@@ -46,7 +46,8 @@ public class CompanyService {
 	}
 
 	public Company updateCompany(long id, Company company) {
-		return repository.updateCompany(id, company);
+		return null;
+		//return repository.updateCompany(id, company);
 	}
 
 }

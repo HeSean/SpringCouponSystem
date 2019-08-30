@@ -21,7 +21,7 @@ public class Coupon {
 
 	private static String imageURL = "https://tinyurl.com/y3rauvft";
 	private long id;
-	private String title;
+	private String Name;
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private int amount;
@@ -33,7 +33,7 @@ public class Coupon {
 	// CTOR
 	public Coupon(String title, LocalDate startDate, LocalDate endDate, int amount, CouponType type, String message,
 			double price, String image) {
-		setTitle(title);
+		setName(title);
 		setStartDate(startDate);
 		setEndDate(endDate);
 		setAmount(amount);
@@ -47,7 +47,7 @@ public class Coupon {
 	public Coupon(Long id, String title, LocalDate startDate, LocalDate endDate, int amount, CouponType type,
 			String message, double price, String image) {
 		setId(id);
-		setTitle(title);
+		setName(title);
 		setStartDate(startDate);
 		setEndDate(endDate);
 		setAmount(amount);
@@ -61,7 +61,7 @@ public class Coupon {
 	public Coupon(Long id, String title, LocalDate sDate, LocalDate eDate, int amount, String type, String message,
 			double price, String image) {
 		setId(id);
-		setTitle(title);
+		setName(title);
 		setStartDate(sDate);
 		setEndDate(eDate);
 		setAmount(amount);
@@ -84,8 +84,8 @@ public class Coupon {
 	 * @return the title
 	 */
 	@Column(unique = true)
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return Name;
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class Coupon {
 
 	@Override
 	public String toString() {
-		return "Coupon [ ID = " + id + " | Title = " + title + " | Start Date = " + startDate + " | End Date = "
+		return "Coupon [ ID = " + id + " | Title = " + Name + " | Start Date = " + startDate + " | End Date = "
 				+ endDate + " | Amount = " + amount + " | Type = " + type + " | Message = " + message + " | Price = "
 				+ price + "]";
 	}

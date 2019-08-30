@@ -48,10 +48,10 @@ public class CouponPurchaseException extends RuntimeException {
 	public String toString() {
 		if (coupon != null) {
 			if (error == 2) {
-				return "CouponPurchaseException of coupon - \"" + coupon.getTitle()
+				return "CouponPurchaseException of coupon - \"" + coupon.getName()
 						+ "\". There are no more coupons left in stock, Please try again.";
 			} else {
-				return "CouponPurchaseException of coupon - \"" + coupon.getTitle()
+				return "CouponPurchaseException of coupon - \"" + coupon.getName()
 						+ "\".Wanted coupon has expired. Please try again.";
 			}
 		} else

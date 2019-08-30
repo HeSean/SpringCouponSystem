@@ -54,7 +54,8 @@ public class CouponService {
 	}
 
 	public Coupon updateCoupon(long id, Coupon coupon) {
-		return repository.updateCoupon(id, coupon);
+		return null;
+		//return repository.updateCoupon(id, coupon);
 	}
 
 }

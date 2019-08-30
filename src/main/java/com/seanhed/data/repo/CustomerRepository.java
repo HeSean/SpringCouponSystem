@@ -10,6 +10,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
 	public List<Customer> deleteByName(String name);
 
-	public Customer updateCustomer(long id, Customer customer);
+	//public Customer updateCustomer(long id, Customer customer);
 
 }

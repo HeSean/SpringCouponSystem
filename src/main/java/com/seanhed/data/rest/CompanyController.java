@@ -28,7 +28,7 @@ public class CompanyController {
 		return service.getCompany(id);
 	}
 
-	// http://localhost:8080/company/getAlls
+	// http://localhost:8080/company/getAll
 	@GetMapping("getAll")
 	public List<Company> getCompnies() {
 		return service.getCompanies();

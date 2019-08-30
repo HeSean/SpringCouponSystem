@@ -48,7 +48,8 @@ public class CustomerService {
 	}
 	
 	public Customer updateCustomer(long id, Customer customer) {
-		return repository.updateCustomer(id, customer);
+		return null;
+		//return repository.updateCustomer(id, customer);
 	}
 	
 	

@@ -10,5 +10,5 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
 	public List<Coupon> deleteByName(String name);
 
-	public Coupon updateCoupon(long id, Coupon coupon);
+	//public Coupon updateCoupon(long id, Coupon coupon);
 }

@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -21,23 +23,23 @@ import lombok.NoArgsConstructor;
 public class Customer {
 	
 	private long id;
-	private String custName;
+	private String Name;
 	private String password;
 	private Collection<Coupon> coupons = new LinkedHashSet<Coupon>();
 	
-	public Customer(long id, String custname) {
+	public Customer(long id, String custName) {
 		setId(id);
-		setCustName(custname);
+		setName(custName);
 	}
 
 	public Customer(long id, String custName, String password) {
 		setId(id);
 		setPassword(password);
-		setCustName(custName);
+		setName(custName);
 	}
 
 	public Customer(String custName, String password) {
-		setCustName(custName);
+		setName(custName);
 		setPassword(password);
 	}
 	
@@ -55,8 +57,8 @@ public class Customer {
 	 * @return the custName
 	 */
 	@Column(unique=true)
-	public String getCustName() {
-		return custName;
+	public String getName() {
+		return Name;
 	}
 	
 	
@@ -72,6 +74,7 @@ public class Customer {
 	/**
 	 * @return the coupons
 	 */
+	@OneToMany
 	public Collection<Coupon> getCoupons() {
 		return coupons;
 	}
@@ -85,7 +88,7 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		return "Customer [ ID = " + id + " | Customer Name = " + custName + " | Password = " + password
+		return "Customer [ ID = " + id + " | Customer Name = " + Name + " | Password = " + password
 				+ " | Available Coupons = " + coupons + "]";
 	}
 }
