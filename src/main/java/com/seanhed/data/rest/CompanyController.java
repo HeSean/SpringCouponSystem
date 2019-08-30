@@ -40,11 +40,13 @@ public class CompanyController {
 		return service.addCompany(company);
 	}
 
+	// http://localhost:8080/company/delete/YesPlanet
 	@DeleteMapping("/delete/{name}")
 	public List<Company> deleteCompany(@PathVariable String name) {
 		return service.deleteCompany(name);
 	}
 
+	// http://localhost:8080/company/update/1
 	@PutMapping("/update/{id}")
 	public Company updateCompany(@PathVariable long id, @RequestBody Company company) {
 		return service.updateCompany(id, company);
