@@ -1,12 +1,15 @@
 package com.seanhed.beans;
 
-import java.time.LocalDate;
+
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.TemporalType;
+import javax.persistence.Temporal;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,8 +25,8 @@ public class Coupon {
 	private static String imageURL = "https://tinyurl.com/y3rauvft";
 	private long id;
 	private String Name;
-	private LocalDate startDate;
-	private LocalDate endDate;
+	private Date startDate = java.sql.Date.valueOf("2019-01-01");
+	private Date endDate = java.sql.Date.valueOf("2019-10-31");
 	private int amount;
 	private CouponType type;
 	private String message;
@@ -31,11 +34,9 @@ public class Coupon {
 	private String image;
 
 	// CTOR
-	public Coupon(String title, LocalDate startDate, LocalDate endDate, int amount, CouponType type, String message,
+	public Coupon(String title, int amount, CouponType type, String message,
 			double price, String image) {
 		setName(title);
-		setStartDate(startDate);
-		setEndDate(endDate);
 		setAmount(amount);
 		setType(type);
 		setMessage(message);
@@ -44,12 +45,10 @@ public class Coupon {
 	}
 
 	// new coupon with specified ID
-	public Coupon(Long id, String title, LocalDate startDate, LocalDate endDate, int amount, CouponType type,
+	public Coupon(Long id, String title, int amount, CouponType type,
 			String message, double price, String image) {
 		setId(id);
 		setName(title);
-		setStartDate(startDate);
-		setEndDate(endDate);
 		setAmount(amount);
 		setType(type);
 		setMessage(message);
@@ -58,12 +57,10 @@ public class Coupon {
 	}
 
 	// Retrieving coupon from db
-	public Coupon(Long id, String title, LocalDate sDate, LocalDate eDate, int amount, String type, String message,
+	public Coupon(Long id, String title, int amount, String type, String message,
 			double price, String image) {
 		setId(id);
 		setName(title);
-		setStartDate(sDate);
-		setEndDate(eDate);
 		setAmount(amount);
 		setType(type);
 		setMessage(message);
@@ -92,7 +89,8 @@ public class Coupon {
 	 * @return the startDate
 	 */
 	@Column
-	public LocalDate getStartDate() {
+	@Temporal(TemporalType.DATE)
+	public Date getStartDate() {
 		return startDate;
 	}
 
@@ -100,7 +98,8 @@ public class Coupon {
 	 * @return the endDate
 	 */
 	@Column
-	public LocalDate getEndDate() {
+	@Temporal(TemporalType.DATE)
+	public Date getEndDate() {
 		return endDate;
 	}
 
