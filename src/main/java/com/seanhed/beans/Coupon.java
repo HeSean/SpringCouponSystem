@@ -1,10 +1,12 @@
 package com.seanhed.beans;
 
-
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -14,6 +16,7 @@ import javax.persistence.Temporal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.bytebuddy.asm.Advice.Local;
 
 @Entity
 @Table
@@ -25,8 +28,8 @@ public class Coupon {
 	private static String imageURL = "https://tinyurl.com/y3rauvft";
 	private long id;
 	private String Name;
-	private Date startDate = java.sql.Date.valueOf("2019-01-01");
-	private Date endDate = java.sql.Date.valueOf("2019-10-31");
+	private LocalDate startDate = LocalDate.of(2019, 01, 01);
+	private LocalDate endDate = LocalDate.of(2019, 12, 01);
 	private int amount;
 	private CouponType type;
 	private String message;
@@ -34,8 +37,7 @@ public class Coupon {
 	private String image;
 
 	// CTOR
-	public Coupon(String title, int amount, CouponType type, String message,
-			double price, String image) {
+	public Coupon(String title, int amount, CouponType type, String message, double price, String image) {
 		setName(title);
 		setAmount(amount);
 		setType(type);
@@ -45,8 +47,7 @@ public class Coupon {
 	}
 
 	// new coupon with specified ID
-	public Coupon(Long id, String title, int amount, CouponType type,
-			String message, double price, String image) {
+	public Coupon(Long id, String title, int amount, CouponType type, String message, double price, String image) {
 		setId(id);
 		setName(title);
 		setAmount(amount);
@@ -57,8 +58,7 @@ public class Coupon {
 	}
 
 	// Retrieving coupon from db
-	public Coupon(Long id, String title, int amount, String type, String message,
-			double price, String image) {
+	public Coupon(Long id, String title, int amount, String type, String message, double price, String image) {
 		setId(id);
 		setName(title);
 		setAmount(amount);
@@ -89,8 +89,7 @@ public class Coupon {
 	 * @return the startDate
 	 */
 	@Column
-	@Temporal(TemporalType.DATE)
-	public Date getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
@@ -98,8 +97,7 @@ public class Coupon {
 	 * @return the endDate
 	 */
 	@Column
-	@Temporal(TemporalType.DATE)
-	public Date getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 
@@ -115,6 +113,7 @@ public class Coupon {
 	 * @return the type
 	 */
 	@Column
+	@Enumerated
 	public CouponType getType() {
 		return type;
 	}

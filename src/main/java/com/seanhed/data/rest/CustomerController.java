@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.seanhed.beans.Coupon;
 import com.seanhed.beans.Customer;
 import com.seanhed.data.service.CustomerService;
 
@@ -39,6 +40,12 @@ public class CustomerController {
 	public Customer addCustomer(@RequestBody Customer customer) {
 		return service.addCustomer(customer);
 	}
+	
+	// http://localhost:8080/customer/buyCoupon
+//	@PostMapping("buyCoupon")
+//	public Coupon buyCoupon(@RequestBody Coupon coupon) {
+//		return service.buyCoupon(coupon);
+//	}
 
 	// http://localhost:8080/customer/delete/Maya
 	@DeleteMapping("/delete/{name}")

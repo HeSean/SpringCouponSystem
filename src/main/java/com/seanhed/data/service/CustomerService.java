@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.seanhed.beans.Coupon;
 import com.seanhed.beans.Customer;
 import com.seanhed.data.repo.CustomerRepository;
 
@@ -43,6 +44,10 @@ public class CustomerService {
 		return repository.save(customer);
 	}
 	
+//	public Coupon buyCoupon(Coupon coupon) {
+//		return repository.buyCoupon(coupon);
+//	}
+	
 	public List<Customer>deleteCustomerByName(String name){
 		return repository.deleteByName(name);
 	}
@@ -51,6 +56,8 @@ public class CustomerService {
 		return null;
 		//return repository.updateCustomer(id, customer);
 	}
+	
+	
 	
 	
 	
