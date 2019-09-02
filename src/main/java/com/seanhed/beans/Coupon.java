@@ -1,22 +1,19 @@
 package com.seanhed.beans;
 
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.TemporalType;
-import javax.persistence.Temporal;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.bytebuddy.asm.Advice.Local;
 
 @Entity
 @Table
@@ -35,6 +32,7 @@ public class Coupon {
 	private String message;
 	private double price;
 	private String image;
+	private Collection<Customer> customers = new LinkedHashSet<Customer>();
 
 	// CTOR
 	public Coupon(String title, int amount, CouponType type, String message, double price, String image) {
@@ -156,10 +154,26 @@ public class Coupon {
 		return image;
 	}
 
+	/**
+	 * @return the imageURL
+	 */
+	public static String getImageURL() {
+		return imageURL;
+	}
+
+	/**
+	 * @return the customers
+	 */
+	public Collection<Customer> getCustomers() {
+		return customers;
+	}
+	
 	@Override
 	public String toString() {
 		return "Coupon [ ID = " + id + " | Title = " + Name + " | Start Date = " + startDate + " | End Date = "
 				+ endDate + " | Amount = " + amount + " | Type = " + type + " | Message = " + message + " | Price = "
 				+ price + "]";
 	}
+
+	
 }

@@ -41,11 +41,11 @@ public class CustomerController {
 		return service.addCustomer(customer);
 	}
 	
-	// http://localhost:8080/customer/buyCoupon
-//	@PostMapping("buyCoupon")
-//	public Coupon buyCoupon(@RequestBody Coupon coupon) {
-//		return service.buyCoupon(coupon);
-//	}
+//	 http://localhost:8080/customer/buyCoupon/{customerID}
+	@PostMapping("/buyCoupon/{id}")
+	public Coupon buyCoupon(@PathVariable long id,@RequestBody Coupon coupon) {
+		return service.buyCoupon(id,coupon);
+	}
 
 	// http://localhost:8080/customer/delete/Maya
 	@DeleteMapping("/delete/{name}")

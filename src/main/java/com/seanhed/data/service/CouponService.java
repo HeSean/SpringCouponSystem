@@ -44,7 +44,7 @@ public class CouponService {
 	}
 
 	public Coupon addCoupon(Coupon coupon) {
-		return this.repository.save(coupon);
+		return repository.save(coupon);
 	}
 
 	public List<Coupon> deleteCoupon(String name) {

@@ -13,6 +13,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
 	//public Customer updateCustomer(long id, Customer customer);
 	
-	//public Coupon buyCoupon(Coupon coupon);
+	public Coupon buyCoupon(long customerID, long couponID);
 
 }
