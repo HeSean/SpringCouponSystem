@@ -12,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.seanhed.beans.Coupon;
+import com.seanhed.beans.CouponCustomer;
+import com.seanhed.beans.CouponCustomerId;
 import com.seanhed.beans.CouponType;
 import com.seanhed.beans.Customer;
+import com.seanhed.data.repo.CouponCustomerRepository;
 import com.seanhed.data.repo.CouponRepository;
 import com.seanhed.data.repo.CustomerRepository;
 import com.seanhed.utils.Database;
@@ -27,10 +30,13 @@ public class CustomerService {
 
 	@Autowired
 	private CouponRepository couponRepository;
+	
+	@Autowired
+	private CouponCustomerRepository couponCustomerRepository;
 
 	@PostConstruct
 	public void initDB() {
-		customerRepository.deleteAll();
+//		customerRepository.deleteAll();
 
 		Customer customer1 = new Customer("Sean", "1234");
 		Customer customer2 = new Customer("Michael", "1234");
@@ -43,9 +49,36 @@ public class CustomerService {
 		coupons.add(new Coupon("blabla", 5, CouponType.FOOD, "By Japanika", 15, Database.getImageURL()));
 		coupons.add(new Coupon("blablalba", 5, CouponType.FOOD, "By YesPlanet", 15, Database.getImageURL()));
 
-		customer1.getCoupons().add(coupons.get(0));
-		customer1.getCoupons().add(coupons.get(1));
-		customer1.getCoupons().add(coupons.get(2));
+		CouponCustomer couponCustomer = new CouponCustomer();
+		couponCustomer.setCoupon(coupons.get(0));
+		couponCustomer.setCustomer(customer1);
+		couponCustomer.setId(new CouponCustomerId(coupons.get(0).getId(), customer1.getId()));
+		System.out.println("cc" + couponCustomer);
+		couponCustomerRepository.save(couponCustomer);
+		
+		CouponCustomer couponCustomer2 = new CouponCustomer();
+		couponCustomer2.setCoupon(coupons.get(1));
+		couponCustomer2.setCustomer(customer1);
+		couponCustomer2.setId(new CouponCustomerId(coupons.get(1).getId(), customer1.getId()));
+		couponCustomerRepository.save(couponCustomer2);
+		
+		CouponCustomer couponCustomer3 = new CouponCustomer();
+		couponCustomer3.setCoupon(coupons.get(2));
+		couponCustomer3.setCustomer(customer1);
+		couponCustomer3.setId(new CouponCustomerId(coupons.get(2).getId(), customer1.getId()));
+		couponCustomerRepository.save(couponCustomer3);
+
+		
+		CouponCustomer couponCustomer4 = new CouponCustomer();
+		couponCustomer4.setCoupon(coupons.get(2));
+		couponCustomer4.setCustomer(customer2);
+		couponCustomer4.setId(new CouponCustomerId(coupons.get(2).getId(), customer2.getId()));
+		couponCustomerRepository.save(couponCustomer4);
+
+		
+		// customer1.getCoupons().add(coupons.get(0));
+		// customer1.getCoupons().add(coupons.get(1));
+		// customer1.getCoupons().add(coupons.get(2));
 		// customer2.getCoupons().add(coupons.get(2));
 		// customer3.getCoupons().add(coupons.get(2));
 		// customer4.getCoupons().add(coupons.get(2));

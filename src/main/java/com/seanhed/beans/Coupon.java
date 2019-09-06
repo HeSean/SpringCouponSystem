@@ -57,7 +57,7 @@ public class Coupon {
 	private double price;
 	private String image;
 
-	// private List<Customer> customers = new ArrayList<Customer>();
+	private Collection<CouponCustomer> customers = new ArrayList<CouponCustomer>();
 
 	// CTOR
 	public Coupon(String title, int amount, CouponType type, String message, double price, String image) {
@@ -182,6 +182,19 @@ public class Coupon {
 	public String getImage() {
 		return image;
 	}
+	
+	/**
+	 * @return the customer
+	 */
+	@OneToMany(mappedBy="coupon",
+			fetch = FetchType.LAZY
+			, cascade = {CascadeType.PERSIST,
+				    CascadeType.MERGE,
+				    CascadeType.DETACH,
+				    CascadeType.REFRESH })
+	public Collection<CouponCustomer> getCustomers() {
+		return customers;
+	}
 
 	@Override
 	public String toString() {
@@ -189,14 +202,6 @@ public class Coupon {
 				+ endDate + " | Amount = " + amount + " | Type = " + type + " | Message = " + message + " | Price = "
 				+ price + "]";
 	}
-	// /**
-	// * @return the customer
-	// */
-	// @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH,
-	// CascadeType.MERGE }, mappedBy = "coupons")
-	// public List<Customer> getCustomers() {
-	// return customers;
-	// }
 
 
 

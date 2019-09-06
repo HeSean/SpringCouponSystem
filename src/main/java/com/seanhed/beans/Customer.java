@@ -10,10 +10,10 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,12 +25,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Customer {
-	
+
 	private long id;
 	private String Name;
 	private String password;
-	private Collection<Coupon> coupons = new ArrayList<Coupon>();
-	
+	private Collection<CouponCustomer> coupons = new ArrayList<CouponCustomer>();
+
 	public Customer(long id, String custName) {
 		setId(id);
 		setName(custName);
@@ -46,7 +46,7 @@ public class Customer {
 		setName(custName);
 		setPassword(password);
 	}
-	
+
 	/**
 	 * @return the id
 	 */
@@ -55,17 +55,15 @@ public class Customer {
 	public long getId() {
 		return id;
 	}
-	
-	
+
 	/**
 	 * @return the custName
 	 */
-	@Column(unique=true)
+	@Column(unique = true)
 	public String getName() {
 		return Name;
 	}
-	
-	
+
 	/**
 	 * @return the password
 	 */
@@ -73,20 +71,21 @@ public class Customer {
 	public String getPassword() {
 		return password;
 	}
-	
-	
+
 	/**
 	 * @return the coupons
 	 */
-//	@ManyToMany(fetch = FetchType.EAGER,
-//	        cascade = {
-//	                CascadeType.MERGE,
-//	                CascadeType.REFRESH})
-	@OneToMany(cascade= {CascadeType.ALL})
-	public Collection<Coupon> getCoupons() {
+	
+	@OneToMany(mappedBy="customer",
+			fetch=FetchType.LAZY,
+			cascade= {CascadeType.PERSIST,
+				    CascadeType.MERGE,
+				    CascadeType.DETACH,
+				    CascadeType.REFRESH})
+	public Collection<CouponCustomer> getCoupons() {
 		return coupons;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Customer [ ID = " + id + " | Customer Name = " + Name + " | Password = " + password
