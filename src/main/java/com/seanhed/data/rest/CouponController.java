@@ -1,5 +1,6 @@
 package com.seanhed.data.rest;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,13 @@ public class CouponController {
 	public Coupon getCoupon(@PathVariable long id) {
 		return service.getCoupon(id);
 	}
+	
+	// http://localhost:8080/coupon/getCouponByType
+	@GetMapping("/getCouponByType/{type}")
+	public Collection<Coupon> getCouponByType(@PathVariable String name) {
+		return service.findByType(name);
+	}
+	
 
 	// http://localhost:8080/coupon/getAll
 	@GetMapping("/getAll")
@@ -42,9 +50,14 @@ public class CouponController {
 
 	// http://localhost:8080/coupon/delete/Seventh Popcorn Free
 	// maybe will be @RequestBody because of spaces in name
-	@DeleteMapping("/delete/{name}")
-	public List<Coupon> deleteCoupon(@PathVariable String name) {
-		return service.deleteCoupon(name);
+	@DeleteMapping("/delete")
+	public Collection<Coupon> deleteCoupon(@RequestBody String name) {
+		return service.deleteCouponByName(name);
+	}
+	
+	@DeleteMapping("/delete/{id}")
+	public Collection<Coupon> deleteCoupon(@PathVariable long id) {
+		return service.deleteCouponById(id);
 	}
 
 	// http://localhost:8080/coupon/update/1

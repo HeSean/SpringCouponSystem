@@ -1,12 +1,14 @@
 package com.seanhed.data.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.Repository;
 import org.springframework.stereotype.Service;
 
 import com.seanhed.beans.Coupon;
@@ -43,8 +45,12 @@ public class CouponService {
 		return couponRepository.save(coupon);
 	}
 
-	public List<Coupon> deleteCoupon(String name) {
+	public Collection<Coupon> deleteCouponByName(String name) {
 		return couponRepository.deleteByName(name);
+	}
+	
+	public Collection<Coupon> deleteCouponById(long id) {
+		return	couponRepository.deleteById(id);
 	}
 
 	public Coupon updateCoupon(long id, Coupon newCoupon) {
@@ -71,6 +77,17 @@ public class CouponService {
 			existingCoupon.setPrice(newCoupon.getPrice());
 		}
 		return couponRepository.save(existingCoupon);
+	}
+	
+	public  Collection<Coupon> findByType(String type){
+		//String type = cType.toString();
+		Collection<Coupon> coupons = new ArrayList<>();
+		try {
+			coupons =  couponRepository.findByType(type);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return coupons;
 	}
 
 }

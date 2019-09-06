@@ -95,7 +95,7 @@ public class Company {
 	 * @return the coupons
 	 */
 	//mappedBy="OwnedByCompany",cascade = { CascadeType.ALL }
-	@OneToMany(cascade=CascadeType.ALL)
+	@OneToMany(cascade=CascadeType.ALL,orphanRemoval=true)
 	public Collection<Coupon> getCoupons() {
 		return coupons;
 	}
