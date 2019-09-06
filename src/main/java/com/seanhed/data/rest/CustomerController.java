@@ -43,9 +43,9 @@ public class CustomerController {
 
 	// http://localhost:8080/customer/buyCoupon
 	@PostMapping("/buyCoupon/{id}")
-	public String buyCoupon(@PathVariable long custID, @RequestBody Coupon coupon) {
-		System.out.println("buyCoupon in CustomerController ...  = " + coupon);
-		return service.buyCoupon(custID, coupon);
+	public Customer buyCoupon(@PathVariable long id, @RequestBody long couponID) {
+		System.out.println("buyCoupon in CustomerController ... ");
+		return service.buyCoupon(id, couponID);
 	}
 
 	// http://localhost:8080/customer/delete/Maya

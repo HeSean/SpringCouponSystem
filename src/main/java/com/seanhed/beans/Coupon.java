@@ -122,8 +122,7 @@ public class Coupon {
 	 * @return the endDate
 	 */
 	@Column
-	@DateTimeFormat(iso = ISO.DATE)
-	// @JsonFormat(pattern = "dd-MM-yyyy")
+	@JsonFormat(pattern = "dd-MM-yyyy")
 	public Date getEndDate() {
 		return endDate;
 	}

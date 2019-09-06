@@ -43,6 +43,14 @@ public class CustomerService {
 		coupons.add(new Coupon("blabla", 5, CouponType.FOOD, "By Japanika", 15, Database.getImageURL()));
 		coupons.add(new Coupon("blablalba", 5, CouponType.FOOD, "By YesPlanet", 15, Database.getImageURL()));
 
+		
+//		buyCoupon(customer1.getId(), coupons.get(0).getId());
+//		buyCoupon(customer1.getId(), coupons.get(1).getId());
+//		buyCoupon(customer1.getId(), coupons.get(2).getId());
+//		buyCoupon(customer2.getId(), coupons.get(2).getId());
+//		buyCoupon(customer3.getId(), coupons.get(3).getId());
+		
+		
 		customer1.getCoupons().add(coupons.get(0));
 		customer1.getCoupons().add(coupons.get(1));
 		customer1.getCoupons().add(coupons.get(2));
@@ -72,9 +80,14 @@ public class CustomerService {
 		return customerRepository.save(customer);
 	}
 
-	public String buyCoupon(Long custID, Coupon coupon) {
-
-		return null;
+	public Customer buyCoupon(long customerID, long couponID) {
+		Customer customer = customerRepository.getOne(customerID);
+		Coupon coupon = couponRepository.getOne(couponID);
+		System.out.println("customer ---> " + customer + " , coupon ---> " + coupon);
+		customer.getCoupons().add(coupon);
+		coupon.setAmount(coupon.getAmount()-1);
+		couponRepository.save(coupon);
+		return customerRepository.save(customer);
 	}
 
 	public List<Customer> deleteCustomerByName(String name) {
