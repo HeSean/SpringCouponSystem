@@ -1,16 +1,38 @@
 package com.seanhed.beans;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.cache.spi.entry.StructuredCacheEntry;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.seanhed.utils.Database;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,14 +47,17 @@ public class Coupon {
 	private static String imageURL = "https://tinyurl.com/y3rauvft";
 	private long id;
 	private String Name;
-	private LocalDate startDate = LocalDate.of(2019, 01, 01);
-	private LocalDate endDate = LocalDate.of(2019, 12, 01);
+
+	private Date startDate = Date.from(Database.getStartInstant());
+	private Date endDate = Date.from(Database.getEndInstant());
+
 	private int amount;
 	private CouponType type;
 	private String message;
 	private double price;
 	private String image;
-	private Collection<Customer> customers = new LinkedHashSet<Customer>();
+
+	// private List<Customer> customers = new ArrayList<Customer>();
 
 	// CTOR
 	public Coupon(String title, int amount, CouponType type, String message, double price, String image) {
@@ -87,7 +112,9 @@ public class Coupon {
 	 * @return the startDate
 	 */
 	@Column
-	public LocalDate getStartDate() {
+	// @DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	public Date getStartDate() {
 		return startDate;
 	}
 
@@ -95,7 +122,9 @@ public class Coupon {
 	 * @return the endDate
 	 */
 	@Column
-	public LocalDate getEndDate() {
+	@DateTimeFormat(iso = ISO.DATE)
+	// @JsonFormat(pattern = "dd-MM-yyyy")
+	public Date getEndDate() {
 		return endDate;
 	}
 
@@ -154,26 +183,21 @@ public class Coupon {
 		return image;
 	}
 
-	/**
-	 * @return the imageURL
-	 */
-	public static String getImageURL() {
-		return imageURL;
-	}
-
-	/**
-	 * @return the customers
-	 */
-	public Collection<Customer> getCustomers() {
-		return customers;
-	}
-	
 	@Override
 	public String toString() {
 		return "Coupon [ ID = " + id + " | Title = " + Name + " | Start Date = " + startDate + " | End Date = "
 				+ endDate + " | Amount = " + amount + " | Type = " + type + " | Message = " + message + " | Price = "
 				+ price + "]";
 	}
+	// /**
+	// * @return the customer
+	// */
+	// @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH,
+	// CascadeType.MERGE }, mappedBy = "coupons")
+	// public List<Customer> getCustomers() {
+	// return customers;
+	// }
 
-	
+
+
 }

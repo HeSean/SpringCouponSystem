@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.seanhed.beans.Coupon;
 import com.seanhed.beans.CouponType;
 import com.seanhed.data.repo.CouponRepository;
+import com.seanhed.data.repo.CustomerRepository;
 import com.seanhed.utils.Database;
 
 @Service
@@ -19,41 +20,57 @@ import com.seanhed.utils.Database;
 public class CouponService {
 
 	@Autowired
-	private CouponRepository repository;
+	private CouponRepository couponRepository;
+
+	@Autowired
+	private CustomerRepository customerRepository;
 
 	@PostConstruct
 	public void initDB() {
-		repository.deleteAll();
-		List<Coupon> coupons = new ArrayList<>();
-		coupons.add(new Coupon("Seventh Popcorn Free", 5, CouponType.FOOD, "By YesPlanet", 15, Database.getImageURL()));
-		coupons.add(
-				new Coupon("Free Popcorn with movie", 5, CouponType.FOOD, "By YesPlanet", 15, Database.getImageURL()));
-		coupons.add(new Coupon("Free Tent with Lederman swiss knife", 5, CouponType.CAMPING, "By Hagor", 15,
-				Database.getImageURL()));
-		coupons.add(new Coupon("Bonus ChickenWing with takeout order", 5, CouponType.FOOD, "By Japanika", 15,
-				Database.getImageURL()));
-		repository.save(coupons);
+		// couponRepository.deleteAll();
+		System.out.println("initDB of CouponService");
 	}
 
 	public Coupon getCoupon(long id) {
-		return repository.getOne(id);
+		return couponRepository.getOne(id);
 	}
 
 	public List<Coupon> getCoupons() {
-		return repository.findAll();
+		return couponRepository.findAll();
 	}
 
 	public Coupon addCoupon(Coupon coupon) {
-		return repository.save(coupon);
+		return couponRepository.save(coupon);
 	}
 
 	public List<Coupon> deleteCoupon(String name) {
-		return repository.deleteByName(name);
+		return couponRepository.deleteByName(name);
 	}
 
-	public Coupon updateCoupon(long id, Coupon coupon) {
-		return null;
-		// return repository.updateCoupon(id, coupon);
+	public Coupon updateCoupon(long id, Coupon newCoupon) {
+		Coupon existingCoupon = couponRepository.getOne(id);
+		if (!(existingCoupon.getName().equals(newCoupon.getName())) && newCoupon.getName() != null) {
+			existingCoupon.setName(newCoupon.getName());
+		}
+		if (!(existingCoupon.getImage().equals(newCoupon.getImage())) && newCoupon.getImage() != null) {
+			existingCoupon.setImage(newCoupon.getImage());
+		}
+		if (!(existingCoupon.getMessage().equals(newCoupon.getMessage())) && newCoupon.getMessage() != null) {
+			existingCoupon.setMessage(newCoupon.getMessage());
+		}
+		if (!(existingCoupon.getStartDate().equals(newCoupon.getStartDate())) && newCoupon.getStartDate() != null) {
+			existingCoupon.setStartDate(newCoupon.getStartDate());
+		}
+		if (!(existingCoupon.getEndDate().equals(newCoupon.getEndDate())) && newCoupon.getEndDate() != null) {
+			existingCoupon.setEndDate(newCoupon.getEndDate());
+		}
+		if (existingCoupon.getAmount() != newCoupon.getAmount() && newCoupon.getAmount() > 0) {
+			existingCoupon.setAmount(newCoupon.getAmount());
+		}
+		if (existingCoupon.getPrice() != newCoupon.getPrice() && newCoupon.getPrice() > 0) {
+			existingCoupon.setPrice(newCoupon.getPrice());
+		}
+		return couponRepository.save(existingCoupon);
 	}
 
 }

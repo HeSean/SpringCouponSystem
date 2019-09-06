@@ -28,7 +28,7 @@ public class CouponController {
 		return service.getCoupon(id);
 	}
 
-	// http://localhost:8080/coupon/getAlls
+	// http://localhost:8080/coupon/getAll
 	@GetMapping("/getAll")
 	public List<Coupon> getCoupons() {
 		return service.getCoupons();

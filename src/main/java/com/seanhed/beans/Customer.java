@@ -1,14 +1,19 @@
 package com.seanhed.beans;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +29,7 @@ public class Customer {
 	private long id;
 	private String Name;
 	private String password;
-	private Collection<Coupon> coupons = new LinkedHashSet<Coupon>();
+	private Collection<Coupon> coupons = new ArrayList<Coupon>();
 	
 	public Customer(long id, String custName) {
 		setId(id);
@@ -73,18 +78,15 @@ public class Customer {
 	/**
 	 * @return the coupons
 	 */
-	@OneToMany
+//	@ManyToMany(fetch = FetchType.EAGER,
+//	        cascade = {
+//	                CascadeType.MERGE,
+//	                CascadeType.REFRESH})
+	@OneToMany(cascade= {CascadeType.ALL})
 	public Collection<Coupon> getCoupons() {
 		return coupons;
 	}
 	
-	/**
-	 * @adds coupon to couponList
-	 */
-	public void addCoupon(Coupon coupon) {
-		this.coupons.add(coupon);
-	}
-
 	@Override
 	public String toString() {
 		return "Customer [ ID = " + id + " | Customer Name = " + Name + " | Password = " + password

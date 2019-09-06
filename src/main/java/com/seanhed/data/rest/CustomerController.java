@@ -29,7 +29,7 @@ public class CustomerController {
 		return service.getCustomer(id);
 	}
 
-	// http://localhost:8080/customer/getAlls
+	// http://localhost:8080/customer/getAll
 	@GetMapping("getAll")
 	public List<Customer> getCustomers() {
 		return service.getCustomers();
@@ -40,11 +40,12 @@ public class CustomerController {
 	public Customer addCustomer(@RequestBody Customer customer) {
 		return service.addCustomer(customer);
 	}
-	
-//	 http://localhost:8080/customer/buyCoupon/{customerID}
+
+	// http://localhost:8080/customer/buyCoupon
 	@PostMapping("/buyCoupon/{id}")
-	public Coupon buyCoupon(@PathVariable long id,@RequestBody Coupon coupon) {
-		return service.buyCoupon(id,coupon);
+	public String buyCoupon(@PathVariable long custID, @RequestBody Coupon coupon) {
+		System.out.println("buyCoupon in CustomerController ...  = " + coupon);
+		return service.buyCoupon(custID, coupon);
 	}
 
 	// http://localhost:8080/customer/delete/Maya
@@ -52,7 +53,7 @@ public class CustomerController {
 	public List<Customer> deleteCustomer(@PathVariable String name) {
 		return service.deleteCustomerByName(name);
 	}
-	
+
 	// http://localhost:8080/customer/update/1
 	@PutMapping("/update/{id}")
 	public Customer updateCustomer(@PathVariable long id, @RequestBody Customer customer) {

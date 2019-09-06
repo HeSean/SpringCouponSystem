@@ -1,10 +1,13 @@
 package com.seanhed.beans;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -13,6 +16,7 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 @Entity
 @Table
@@ -25,7 +29,7 @@ public class Company {
 	private String Name;
 	private String password;
 	private String email;
-	private Collection<Coupon> coupons = new LinkedHashSet<Coupon>();
+	private Collection<Coupon> coupons = new ArrayList<>();
 	
 	
 	//first creation ctor
@@ -90,7 +94,8 @@ public class Company {
 	/**
 	 * @return the coupons
 	 */
-	@OneToMany
+	//mappedBy="OwnedByCompany",cascade = { CascadeType.ALL }
+	@OneToMany(cascade=CascadeType.ALL)
 	public Collection<Coupon> getCoupons() {
 		return coupons;
 	}

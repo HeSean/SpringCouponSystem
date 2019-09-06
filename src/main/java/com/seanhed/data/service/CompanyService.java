@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.seanhed.beans.Company;
+import com.seanhed.beans.Coupon;
+import com.seanhed.beans.CouponType;
 import com.seanhed.data.repo.CompanyRepository;
+import com.seanhed.utils.Database;
 
 @Service
 @Transactional
@@ -22,11 +25,27 @@ public class CompanyService {
 	@PostConstruct
 	public void initDB() {
 		repository.deleteAll();
-		List<Company> companies = new ArrayList<>();
-		companies.add(new Company("Yesplanet", "1234", "Yesplanet@gmail.com"));
-		companies.add(new Company("Hagor", "1234", "Hagor@gmail.com"));
-		companies.add(new Company("Japanika", "1234", "Japanika@gmail.com"));
-		repository.save(companies);
+		Company company1 = new Company("Yesplanet", "1234", "Yesplanet@gmail.com");
+		Company company2 = new Company("Hagor", "1234", "Hagor@gmail.com");
+		Company company3 = new Company("Japanika", "1234", "Japanika@gmail.com");
+
+		List<Coupon> coupons = new ArrayList<>();
+		coupons.add(new Coupon("Seventh Popcorn Free", 5, CouponType.FOOD, "By YesPlanet", 15, Database.getImageURL()));
+		coupons.add(new Coupon("1+1 on drinks", 5, CouponType.FOOD, "By YesPlanet", 15, Database.getImageURL()));
+		coupons.add(new Coupon("Free Tent with Lederman swiss knife", 5, CouponType.CAMPING, "By Hagor", 15,
+				Database.getImageURL()));
+		coupons.add(new Coupon("Bonus ChickenWing with takeout order", 5, CouponType.FOOD, "By Japanika", 15,
+				Database.getImageURL()));
+
+		company1.getCoupons().add(coupons.get(0));
+		company1.getCoupons().add(coupons.get(1));
+		company2.getCoupons().add(coupons.get(2));
+		company3.getCoupons().add(coupons.get(3));
+
+		repository.save(company1);
+		repository.save(company2);
+		repository.save(company3);
+
 	}
 
 	public Company getCompany(long id) {
@@ -45,9 +64,21 @@ public class CompanyService {
 		return repository.deleteByName(name);
 	}
 
-	public Company updateCompany(long id, Company company) {
-		return null;
-		//return repository.updateCompany(id, company);
+	public Company updateCompany(long id, Company newCompany) {
+		Company existingCompany = repository.getOne(id);
+		if (newCompany.getName() != null && !(existingCompany.getName().equals(newCompany.getName()))) {
+			existingCompany.setName(newCompany.getName());
+		}
+		if (newCompany.getPassword() != null && !(existingCompany.getPassword().equals(newCompany.getPassword())))  {
+			existingCompany.setPassword(newCompany.getPassword());
+		}
+		if (newCompany.getEmail() != null && !(existingCompany.getEmail().equals(newCompany.getEmail()))) {
+			existingCompany.setEmail(newCompany.getEmail());
+		}
+		if (newCompany.getCoupons() != null && !(existingCompany.getCoupons().equals(newCompany.getCoupons()))) {
+			existingCompany.setCoupons(newCompany.getCoupons());
+		}
+		return repository.save(existingCompany);
 	}
 
 }

@@ -10,5 +10,4 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
 	public List<Company> deleteByName(String name);
 
-	//public Company updateCompany(long id, Company company);
 }
