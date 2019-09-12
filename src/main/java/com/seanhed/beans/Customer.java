@@ -29,7 +29,9 @@ public class Customer {
 	private long id;
 	private String Name;
 	private String password;
-	private Collection<Coupon> coupons = new ArrayList<Coupon>();
+	
+	private Collection<Coupon> coupons = new ArrayList<>();
+	
 	
 	public Customer(long id, String custName) {
 		setId(id);
@@ -78,11 +80,7 @@ public class Customer {
 	/**
 	 * @return the coupons
 	 */
-//	@ManyToMany(fetch = FetchType.EAGER,
-//	        cascade = {
-//	                CascadeType.MERGE,
-//	                CascadeType.REFRESH})
-	@OneToMany(cascade= {CascadeType.ALL},orphanRemoval=true)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	public Collection<Coupon> getCoupons() {
 		return coupons;
 	}
@@ -92,4 +90,6 @@ public class Customer {
 		return "Customer [ ID = " + id + " | Customer Name = " + Name + " | Password = " + password
 				+ " | Available Coupons = " + coupons + "]";
 	}
+
+
 }

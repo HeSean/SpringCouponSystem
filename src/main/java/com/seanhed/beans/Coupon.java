@@ -57,7 +57,8 @@ public class Coupon {
 	private double price;
 	private String image;
 
-	// private List<Customer> customers = new ArrayList<Customer>();
+
+	private List<Customer> customers;
 
 	// CTOR
 	public Coupon(String title, int amount, CouponType type, String message, double price, String image) {
@@ -182,20 +183,28 @@ public class Coupon {
 		return image;
 	}
 
+	/**
+	 * @return the customers
+	 */
+	@ManyToMany(mappedBy = "coupons")
+	public List<Customer> getCustomers() {
+		return customers;
+	}
+
+	/**
+	 * @return the imageURL
+	 */
+	public static String getImageURL() {
+		return imageURL;
+	}
+
 	@Override
 	public String toString() {
 		return "Coupon [ ID = " + id + " | Title = " + Name + " | Start Date = " + startDate + " | End Date = "
 				+ endDate + " | Amount = " + amount + " | Type = " + type + " | Message = " + message + " | Price = "
 				+ price + "]";
 	}
-	// /**
-	// * @return the customer
-	// */
-	// @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH,
-	// CascadeType.MERGE }, mappedBy = "coupons")
-	// public List<Customer> getCustomers() {
-	// return customers;
-	// }
+
 
 
 

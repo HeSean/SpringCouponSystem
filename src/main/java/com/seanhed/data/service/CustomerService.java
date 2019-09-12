@@ -38,33 +38,32 @@ public class CustomerService {
 		Customer customer4 = new Customer("Aurora", "1234");
 		Customer customer5 = new Customer("Maya", "1234");
 
-		List<Coupon> coupons = new ArrayList<>();
-		coupons.add(new Coupon("bla", 5, CouponType.CAMPING, "By Hagor", 15, Database.getImageURL()));
-		coupons.add(new Coupon("blabla", 5, CouponType.FOOD, "By Japanika", 15, Database.getImageURL()));
-		coupons.add(new Coupon("blablalba", 5, CouponType.FOOD, "By YesPlanet", 15, Database.getImageURL()));
-
-		
+//		List<Coupon> coupons = new ArrayList<>();
+//		coupons.add(new Coupon("bla", 5, CouponType.CAMPING, "By Hagor", 15, Database.getImageURL()));
+//		coupons.add(new Coupon("blabla", 5, CouponType.FOOD, "By Japanika", 15, Database.getImageURL()));
+//		coupons.add(new Coupon("blablalba", 5, CouponType.FOOD, "By YesPlanet", 15, Database.getImageURL()));
+//
+//		
 //		buyCoupon(customer1.getId(), coupons.get(0).getId());
 //		buyCoupon(customer1.getId(), coupons.get(1).getId());
 //		buyCoupon(customer1.getId(), coupons.get(2).getId());
 //		buyCoupon(customer2.getId(), coupons.get(2).getId());
 //		buyCoupon(customer3.getId(), coupons.get(3).getId());
 		
-		
-		customer1.getCoupons().add(coupons.get(0));
-		customer1.getCoupons().add(coupons.get(1));
-		customer1.getCoupons().add(coupons.get(2));
-		// customer2.getCoupons().add(coupons.get(2));
-		// customer3.getCoupons().add(coupons.get(2));
-		// customer4.getCoupons().add(coupons.get(2));
-		// customer5.getCoupons().add(coupons.get(2));
+//		
+//		customer1.getCoupons().add(coupons.get(0));
+//		customer1.getCoupons().add(coupons.get(1));
+//		customer1.getCoupons().add(coupons.get(2));
+//		 customer2.getCoupons().add(coupons.get(2));
+//		 customer3.getCoupons().add(coupons.get(2));
+//		 customer4.getCoupons().add(coupons.get(2));
+//		 customer5.getCoupons().add(coupons.get(2));
 
 		customerRepository.save(customer1);
 		customerRepository.save(customer2);
 		customerRepository.save(customer3);
 		customerRepository.save(customer4);
 		customerRepository.save(customer5);
-		customerRepository.flush();
 
 	}
 

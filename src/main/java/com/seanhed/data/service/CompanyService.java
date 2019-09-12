@@ -24,7 +24,7 @@ public class CompanyService {
 
 	@PostConstruct
 	public void initDB() {
-		repository.deleteAll();
+		//repository.deleteAll();
 		Company company1 = new Company("Yesplanet", "1234", "Yesplanet@gmail.com");
 		Company company2 = new Company("Hagor", "1234", "Hagor@gmail.com");
 		Company company3 = new Company("Japanika", "1234", "Japanika@gmail.com");
