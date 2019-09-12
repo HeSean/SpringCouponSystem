@@ -37,12 +37,12 @@ public class SpringCouponSystemApplication {
 		System.out.println("Coupons - " + coupons);
 		System.out.println("customers - " + customers);
 		
-		System.out.println(customerService.buyCoupon(customers.get(0).getId(),coupons.get(0).getId()));
-		System.out.println(customerService.buyCoupon(customers.get(1).getId(),coupons.get(0).getId()));
-		System.out.println(customerService.buyCoupon(customers.get(2).getId(),coupons.get(0).getId()));
-		System.out.println(customerService.buyCoupon(customers.get(0).getId(),coupons.get(0).getId()));
-		System.out.println(customerService.buyCoupon(customers.get(1).getId(),coupons.get(0).getId()));
-		System.out.println(customerService.buyCoupon(customers.get(2).getId(),coupons.get(0).getId()));
+//		System.out.println(customerService.buyCoupon(customers.get(0).getId(),coupons.get(0).getId()));
+//		System.out.println(customerService.buyCoupon(customers.get(1).getId(),coupons.get(0).getId()));
+//		System.out.println(customerService.buyCoupon(customers.get(2).getId(),coupons.get(0).getId()));
+//		System.out.println(customerService.buyCoupon(customers.get(0).getId(),coupons.get(0).getId()));
+//		System.out.println(customerService.buyCoupon(customers.get(1).getId(),coupons.get(0).getId()));
+//		System.out.println(customerService.buyCoupon(customers.get(2).getId(),coupons.get(0).getId()));
 
 
 	}
