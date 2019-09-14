@@ -21,7 +21,8 @@ import com.seanhed.utils.Database;
 
 @SpringBootApplication(scanBasePackages = "com.seanhed")
 @EnableJpaRepositories("com.seanhed")
-@EntityScan(basePackages = "com.seanhed")
+@EntityScan(basePackages = "com.seanhed.beans")
+
 public class SpringCouponSystemApplication {
 
 	public static void main(String[] args) {
@@ -36,6 +37,10 @@ public class SpringCouponSystemApplication {
 
 		System.out.println("Coupons - " + coupons);
 		System.out.println("customers - " + customers);
+		
+		System.out.println("******************");
+
+
 		
 //		System.out.println(customerService.buyCoupon(customers.get(0).getId(),coupons.get(0).getId()));
 //		System.out.println(customerService.buyCoupon(customers.get(1).getId(),coupons.get(0).getId()));

@@ -24,27 +24,31 @@ public class CompanyService {
 
 	@PostConstruct
 	public void initDB() {
-		//repository.deleteAll();
-		Company company1 = new Company("Yesplanet", "1234", "Yesplanet@gmail.com");
-		Company company2 = new Company("Hagor", "1234", "Hagor@gmail.com");
-		Company company3 = new Company("Japanika", "1234", "Japanika@gmail.com");
-
-		List<Coupon> coupons = new ArrayList<>();
-		coupons.add(new Coupon("Seventh Popcorn Free", 5, CouponType.FOOD, "By YesPlanet", 15, Database.getImageURL()));
-		coupons.add(new Coupon("1+1 on drinks", 5, CouponType.FOOD, "By YesPlanet", 15, Database.getImageURL()));
-		coupons.add(new Coupon("Free Tent with Lederman swiss knife", 5, CouponType.CAMPING, "By Hagor", 15,
-				Database.getImageURL()));
-		coupons.add(new Coupon("Bonus ChickenWing with takeout order", 5, CouponType.FOOD, "By Japanika", 15,
-				Database.getImageURL()));
-
-		company1.getCoupons().add(coupons.get(0));
-		company1.getCoupons().add(coupons.get(1));
-		company2.getCoupons().add(coupons.get(2));
-		company3.getCoupons().add(coupons.get(3));
-
-		repository.save(company1);
-		repository.save(company2);
-		repository.save(company3);
+		// repository.deleteAll();
+		// Company company1 = new Company("Yesplanet", "1234", "Yesplanet@gmail.com");
+		// Company company2 = new Company("Hagor", "1234", "Hagor@gmail.com");
+		// Company company3 = new Company("Japanika", "1234", "Japanika@gmail.com");
+		//
+		// List<Coupon> coupons = new ArrayList<>();
+		// coupons.add(new Coupon("Seventh Popcorn Free", 5, CouponType.FOOD, "By
+		// YesPlanet", 15, Database.getImageURL()));
+		// coupons.add(new Coupon("1+1 on drinks", 5, CouponType.FOOD, "By YesPlanet",
+		// 15, Database.getImageURL()));
+		// coupons.add(new Coupon("Free Tent with Lederman swiss knife", 5,
+		// CouponType.CAMPING, "By Hagor", 15,
+		// Database.getImageURL()));
+		// coupons.add(new Coupon("Bonus ChickenWing with takeout order", 5,
+		// CouponType.FOOD, "By Japanika", 15,
+		// Database.getImageURL()));
+		//
+		// company1.getCoupons().add(coupons.get(0));
+		// company1.getCoupons().add(coupons.get(1));
+		// company2.getCoupons().add(coupons.get(2));
+		// company3.getCoupons().add(coupons.get(3));
+		//
+		// repository.save(company1);
+		// repository.save(company2);
+		// repository.save(company3);
 
 	}
 
@@ -69,7 +73,7 @@ public class CompanyService {
 		if (newCompany.getName() != null && !(existingCompany.getName().equals(newCompany.getName()))) {
 			existingCompany.setName(newCompany.getName());
 		}
-		if (newCompany.getPassword() != null && !(existingCompany.getPassword().equals(newCompany.getPassword())))  {
+		if (newCompany.getPassword() != null && !(existingCompany.getPassword().equals(newCompany.getPassword()))) {
 			existingCompany.setPassword(newCompany.getPassword());
 		}
 		if (newCompany.getEmail() != null && !(existingCompany.getEmail().equals(newCompany.getEmail()))) {

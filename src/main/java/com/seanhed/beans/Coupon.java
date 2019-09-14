@@ -17,6 +17,7 @@ import java.util.Locale;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -140,7 +141,7 @@ public class Coupon {
 	 * @return the type
 	 */
 	@Column
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	public CouponType getType() {
 		return type;
 	}

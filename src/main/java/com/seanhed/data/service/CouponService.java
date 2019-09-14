@@ -79,15 +79,24 @@ public class CouponService {
 		return couponRepository.save(existingCoupon);
 	}
 	
-	public  Collection<Coupon> findByType(String type){
-		//String type = cType.toString();
-		Collection<Coupon> coupons = new ArrayList<>();
+	public  Collection<Coupon> findByType(CouponType type)  { 
 		try {
-			coupons =  couponRepository.findByType(type);
+			return couponRepository.findByType(type);
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
-		return coupons;
 	}
+	
+	public Collection<Coupon> findByPrice(double price) {
+		try {
+			return couponRepository.findByPrice(price);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
 
 }

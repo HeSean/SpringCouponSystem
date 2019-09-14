@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seanhed.beans.Coupon;
+import com.seanhed.beans.CouponType;
 import com.seanhed.data.service.CouponService;
 
 @RestController
@@ -31,11 +32,7 @@ public class CouponController {
 		return service.getCoupon(id);
 	}
 	
-	// http://localhost:8080/coupon/getCouponByType
-	@GetMapping("/getCouponByType/{type}")
-	public Collection<Coupon> getCouponByType(@PathVariable String name) {
-		return service.findByType(name);
-	}
+
 	
 
 	// http://localhost:8080/coupon/getAll
@@ -67,6 +64,18 @@ public class CouponController {
 	@PutMapping("/update/{id}")
 	public Coupon updateCoupon(@PathVariable long id, @RequestBody Coupon coupon) {
 		return service.updateCoupon(id, coupon);
+	}
+	
+	// http://localhost:8080/coupon/getCouponByType
+	@GetMapping("/getCouponByType/{type}")
+	public Collection<Coupon> getCouponByType(@PathVariable CouponType type) {
+		return service.findByType(type);
+	}
+	
+	// http://localhost:8080/coupon/getCouponByPrice
+	@GetMapping("/getCouponByPrice/{price}")
+	public Collection<Coupon> getCouponByPrice(@PathVariable double price) {
+		return service.findByPrice(price);
 	}
 
 }

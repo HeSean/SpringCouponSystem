@@ -30,13 +30,13 @@ public class CustomerService {
 
 	@PostConstruct
 	public void initDB() {
-		customerRepository.deleteAll();
-
-		Customer customer1 = new Customer("Sean", "1234");
-		Customer customer2 = new Customer("Michael", "1234");
-		Customer customer3 = new Customer("Tomer", "1234");
-		Customer customer4 = new Customer("Aurora", "1234");
-		Customer customer5 = new Customer("Maya", "1234");
+//		customerRepository.deleteAll();
+//
+//		Customer customer1 = new Customer("Sean", "1234");
+//		Customer customer2 = new Customer("Michael", "1234");
+//		Customer customer3 = new Customer("Tomer", "1234");
+//		Customer customer4 = new Customer("Aurora", "1234");
+//		Customer customer5 = new Customer("Maya", "1234");
 
 //		List<Coupon> coupons = new ArrayList<>();
 //		coupons.add(new Coupon("bla", 5, CouponType.CAMPING, "By Hagor", 15, Database.getImageURL()));
@@ -59,11 +59,11 @@ public class CustomerService {
 //		 customer4.getCoupons().add(coupons.get(2));
 //		 customer5.getCoupons().add(coupons.get(2));
 
-		customerRepository.save(customer1);
-		customerRepository.save(customer2);
-		customerRepository.save(customer3);
-		customerRepository.save(customer4);
-		customerRepository.save(customer5);
+//		customerRepository.save(customer1);
+//		customerRepository.save(customer2);
+//		customerRepository.save(customer3);
+//		customerRepository.save(customer4);
+//		customerRepository.save(customer5);
 
 	}
 
