@@ -2,6 +2,7 @@ package com.seanhed.data.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -45,7 +46,8 @@ public class CouponService {
 		return couponRepository.save(coupon);
 	}
 
-	public Collection<Coupon> deleteCouponByName(String name) {
+	//public Collection<Coupon>
+	public int deleteCouponByName(String name) {
 		return couponRepository.deleteByName(name);
 	}
 	
@@ -91,6 +93,15 @@ public class CouponService {
 	public Collection<Coupon> findByPrice(double price) {
 		try {
 			return couponRepository.findByPrice(price);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Collection<Coupon> findByDate(Date date) {
+		try {
+			return couponRepository.findByDate(date);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

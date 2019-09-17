@@ -31,6 +31,7 @@ import org.hibernate.cache.spi.entry.StructuredCacheEntry;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.seanhed.utils.Database;
 
@@ -47,10 +48,13 @@ public class Coupon {
 
 	private static String imageURL = "https://tinyurl.com/y3rauvft";
 	private long id;
-	private String Name;
+	private String name;
 
 	private Date startDate = Date.from(Database.getStartInstant());
 	private Date endDate = Date.from(Database.getEndInstant());
+	
+//	private LocalDate startDate = LocalDate.of(2019, 01, 01);
+//	private LocalDate endDate = LocalDate.of(2019, 12, 01);
 
 	private int amount;
 	private CouponType type;
@@ -82,17 +86,6 @@ public class Coupon {
 		setImage(imageURL);
 	}
 
-	// Retrieving coupon from db
-	public Coupon(Long id, String title, int amount, String type, String message, double price, String image) {
-		setId(id);
-		setName(title);
-		setAmount(amount);
-		setType(type);
-		setMessage(message);
-		setPrice(price);
-		setImage(imageURL);
-	}
-
 	/**
 	 * @return the id
 	 */
@@ -107,15 +100,14 @@ public class Coupon {
 	 */
 	@Column(unique = true)
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	/**
 	 * @return the startDate
 	 */
 	@Column
-	// @DateTimeFormat(pattern = "yyyy-MM-dd")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -146,19 +138,6 @@ public class Coupon {
 		return type;
 	}
 
-	/**
-	 * @sets enum coupon type
-	 */
-	private void setType(CouponType type) {
-		this.type = type;
-	}
-
-	/**
-	 * @sets coupon type from string to enum
-	 */
-	public void setType(String type) {
-		this.type = CouponType.valueOf(type);
-	}
 
 	/**
 	 * @return the message
@@ -187,21 +166,22 @@ public class Coupon {
 	/**
 	 * @return the customers
 	 */
+	@JsonBackReference
 	@ManyToMany(mappedBy = "coupons")
 	public List<Customer> getCustomers() {
 		return customers;
 	}
 
-	/**
-	 * @return the imageURL
-	 */
-	public static String getImageURL() {
-		return imageURL;
-	}
+//	/**
+//	 * @return the imageURL
+//	 */
+//	public static String getImageURL() {
+//		return imageURL;
+//	}
 
 	@Override
 	public String toString() {
-		return "Coupon [ ID = " + id + " | Title = " + Name + " | Start Date = " + startDate + " | End Date = "
+		return "Coupon [ ID = " + id + " | Title = " + name + " | Start Date = " + startDate + " | End Date = "
 				+ endDate + " | Amount = " + amount + " | Type = " + type + " | Message = " + message + " | Price = "
 				+ price + "]";
 	}

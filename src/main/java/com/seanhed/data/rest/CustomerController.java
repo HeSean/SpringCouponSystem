@@ -3,6 +3,7 @@ package com.seanhed.data.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,38 +28,50 @@ public class CustomerController {
 
 	// http://localhost:8080/customer/getCustomer/1
 	@GetMapping("/getCustomer/{id}")
-	public Customer getCustomer(@PathVariable long id) {
-		return service.getCustomer(id);
+	public  ResponseEntity<?> getCustomer(@PathVariable long id) {
+		Customer customer =service.getCustomer(id);
+		System.out.println("getCustomer - " + customer);
+		return ResponseEntity.ok().body(customer);
 	}
 
 	// http://localhost:8080/customer/getAll
 	@GetMapping("getAll")
-	public List<Customer> getCustomers() {
-		return service.getCustomers();
+	public ResponseEntity<List<Customer>> getCustomers() {
+		List<Customer> customers = service.getCustomers();
+		System.out.println("customer list - " + customers);
+		return ResponseEntity.ok().body(customers);
 	}
 
 	// http://localhost:8080/customer/add
 	@PostMapping("add")
-	public Customer addCustomer(@RequestBody Customer customer) {
-		return service.addCustomer(customer);
+	public  ResponseEntity<?> addCustomer(@RequestBody Customer customer) {
+		System.out.println("1              savedCustomer is - " + customer);
+		Customer savedCustomer =  service.addCustomer(customer);
+		System.out.println("2             savedCustomer is - " + customer);
+		return ResponseEntity.ok().body(savedCustomer);
 	}
 
 	// http://localhost:8080/customer/buyCoupon
 	@PostMapping("/buyCoupon/{id}")
-	public Customer buyCoupon(@PathVariable long id, @RequestBody long couponID) {
-		System.out.println("buyCoupon in CustomerController ... ");
-		return service.buyCoupon(id, couponID);
+	public ResponseEntity<?> buyCoupon(@PathVariable long id, @RequestBody long couponID) {
+		Customer customer =  service.buyCoupon(id, couponID);
+		System.out.println("buyCoupon in CustomerController of customer " + customer);
+		return ResponseEntity.ok().body(customer);
 	}
 
 	// http://localhost:8080/customer/delete/Maya
 	@DeleteMapping("/delete/{name}")
-	public List<Customer> deleteCustomer(@PathVariable String name) {
-		return service.deleteCustomerByName(name);
+	public ResponseEntity<List<Customer>> deleteCustomer(@PathVariable String name) {
+		List<Customer> customers = service.deleteCustomerByName(name);
+		System.out.println("list of customer by name - " + customers);
+		return ResponseEntity.ok().body(customers);
 	}
 
 	// http://localhost:8080/customer/update/1
 	@PutMapping("/update/{id}")
-	public Customer updateCustomer(@PathVariable long id, @RequestBody Customer customer) {
-		return service.updateCustomer(id, customer);
+	public ResponseEntity<?> updateCustomer(@PathVariable long id, @RequestBody Customer customer) {
+		Customer updatedCustomer =  service.updateCustomer(id, customer);
+		System.out.println("updatedCustomer is - " + updatedCustomer);
+		return ResponseEntity.ok().body(updatedCustomer);
 	}
 }

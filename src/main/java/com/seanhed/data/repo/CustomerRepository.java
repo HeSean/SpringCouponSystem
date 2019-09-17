@@ -14,9 +14,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
 	public List<Customer> deleteByName(String name);
 
-	//public Customer updateCustomer(long id, Customer customer);
-	
-//	@Query("INSERT INTO customers_coupon (customer_id, coupon_id) VALUES (customerID,couponID)")
-//	public Coupon buyCoupon(@Param("customerID") long customerID, @Param("couponID") long couponID);
 
 }

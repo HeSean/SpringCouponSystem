@@ -1,7 +1,9 @@
 package com.seanhed.SpringCouponSystem;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.boot.SpringApplication;
@@ -34,6 +36,11 @@ public class SpringCouponSystemApplication {
 
 		List<Coupon> coupons = couponRepository.findAll();
 		List<Customer> customers = customerRepository.findAll();
+
+		
+		LocalDate localDate = LocalDate.of(2019, 01, 01);
+		System.out.println("localDate " + localDate);
+		
 
 		System.out.println("Coupons - " + coupons);
 		System.out.println("customers - " + customers);

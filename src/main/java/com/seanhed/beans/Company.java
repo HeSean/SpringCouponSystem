@@ -95,17 +95,11 @@ public class Company {
 	 * @return the coupons
 	 */
 	//mappedBy="OwnedByCompany",cascade = { CascadeType.ALL }
-	@OneToMany(cascade=CascadeType.ALL,orphanRemoval=true)
+	@OneToMany(cascade=CascadeType.ALL)
 	public Collection<Coupon> getCoupons() {
 		return coupons;
 	}
 	
-	/**
-	 * @adds coupon to couponList
-	 */
-	public void addCoupon(Coupon coupon) {
-		this.coupons.add(coupon);
-	}
 	
 	@Override
 	public String toString() {
