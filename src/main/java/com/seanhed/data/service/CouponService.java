@@ -8,15 +8,18 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.Repository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.seanhed.beans.Company;
 import com.seanhed.beans.Coupon;
 import com.seanhed.beans.CouponType;
+import com.seanhed.data.repo.CompanyRepository;
 import com.seanhed.data.repo.CouponRepository;
 import com.seanhed.data.repo.CustomerRepository;
-import com.seanhed.utils.Database;
+import com.seanhed.utils.ResponseUtil;
 
 @Service
 @Transactional
@@ -28,34 +31,87 @@ public class CouponService {
 	@Autowired
 	private CustomerRepository customerRepository;
 
+	@Autowired
+	private CompanyRepository companyRepository;
+
 	@PostConstruct
 	public void initDB() {
 		// couponRepository.deleteAll();
 		System.out.println("initDB of CouponService");
 	}
 
-	public Coupon getCoupon(long id) {
-		return couponRepository.getOne(id);
+	public ResponseEntity<Object> getCoupon(long id) {
+		try {
+			Coupon coupon = couponRepository.getOne(id);
+			return ResponseEntity.ok(coupon);
+		} catch (Exception e) {
+			return ResponseUtil.generateErrorCode(500, "Unable to findCoupon with id " + id);
+		}
 	}
 
-	public List<Coupon> getCoupons() {
-		return couponRepository.findAll();
+	public ResponseEntity<List<Object>> getCoupons() {
+		List<Coupon> coupons = couponRepository.findAll();
+		System.out.println("coupons list - " + coupons);
+		return ResponseUtil.generateSuccessMessageWithListBody(coupons);
 	}
 
-	public Coupon addCoupon(Coupon coupon) {
-		return couponRepository.save(coupon);
+	public ResponseEntity<Object> addCoupon(Coupon coupon) {
+		String byCompany = coupon.getMessage().substring(3);
+		Company company = companyRepository.findByName(byCompany);
+		System.out.println("hey ---------------------> " + coupon);
+		couponRepository.save(coupon);
+		System.out.println("retreived company - " + company);
+		company.getCoupons().add(coupon);
+		companyRepository.save(company);
+		return ResponseUtil.generateSuccessMessage("added coupon");
 	}
 
-	//public Collection<Coupon>
-	public int deleteCouponByName(String name) {
-		return couponRepository.deleteByName(name);
-	}
-	
-	public Collection<Coupon> deleteCouponById(long id) {
-		return	couponRepository.deleteById(id);
+	public void removeCouponFromCompanyCoupons(Coupon coupon) {
+		String byCompany = coupon.getMessage().substring(3);
+		Company company = companyRepository.findByName(byCompany);
+		System.out.println("retreived company before delete - " + company);
+		company.getCoupons().remove(coupon);
+		System.out.println("retreived company after delete - " + company);
+		companyRepository.save(company);
+		System.out.println("removed coupon from company coupons..");
 	}
 
-	public Coupon updateCoupon(long id, Coupon newCoupon) {
+	public void removeCouponFromCustomerCoupons(Coupon coupon) {
+		System.out.println("coupon_customers before delete - " + coupon.getCustomers());
+		coupon.setCustomers(new ArrayList<>());
+		System.out.println("coupon_customers after delete - " + coupon.getCustomers());
+		couponRepository.save(coupon);
+	}
+
+	public void deleteCoupon(Coupon coupon) {
+		try {
+			System.out.println("starting to delete coupon ..");
+			removeCouponFromCompanyCoupons(coupon);
+			removeCouponFromCustomerCoupons(coupon);
+			couponRepository.delete(coupon.getId());
+//			couponRepository.deleteById(coupon.getId());
+			couponRepository.flush();
+			System.out.println("finished deleting coupon ..");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public ResponseEntity<Object> deleteCouponByName(String name) {
+		Coupon coupon = couponRepository.findByName(name);
+		deleteCoupon(coupon);
+		// couponRepository.deleteByName(name);
+		return ResponseUtil.generateSuccessMessage("coupon " + name + " deleted :(");
+	}
+
+	public ResponseEntity<Object> deleteCouponById(long id) {
+		Coupon coupon = couponRepository.findById(id);
+		deleteCoupon(coupon);
+		// couponRepository.deleteById(id);
+		return ResponseUtil.generateSuccessMessage("coupon with id of " + id + " deleted :(");
+	}
+
+	public ResponseEntity<Object> updateCoupon(long id, Coupon newCoupon) {
 		Coupon existingCoupon = couponRepository.getOne(id);
 		if (!(existingCoupon.getName().equals(newCoupon.getName())) && newCoupon.getName() != null) {
 			existingCoupon.setName(newCoupon.getName());
@@ -78,36 +134,44 @@ public class CouponService {
 		if (existingCoupon.getPrice() != newCoupon.getPrice() && newCoupon.getPrice() > 0) {
 			existingCoupon.setPrice(newCoupon.getPrice());
 		}
-		return couponRepository.save(existingCoupon);
+		if (existingCoupon.getType() != newCoupon.getType() && newCoupon.getType() != null) {
+			existingCoupon.setType(newCoupon.getType());
+		}
+		couponRepository.save(existingCoupon);
+		return ResponseUtil.generateSuccessMessage("updated coupon");
 	}
-	
-	public  Collection<Coupon> findByType(CouponType type)  { 
+
+	public ResponseEntity<Collection<Coupon>> findByType(CouponType type) {
 		try {
-			return couponRepository.findByType(type);
+			Collection<Coupon> retrievedCoupons = couponRepository.findByType(type);
+			System.out.println("retrievedCoupons by type = " + type + "are ---> " + retrievedCoupons);
+			return ResponseEntity.ok(retrievedCoupons);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
-	public Collection<Coupon> findByPrice(double price) {
+
+	public ResponseEntity<Collection<Coupon>> findByPrice(double price) {
 		try {
-			return couponRepository.findByPrice(price);
+			Collection<Coupon> retrievedCoupons = couponRepository.findByPrice(price);
+			System.out.println("retrievedCoupons by price = " + price + "are ---> " + retrievedCoupons);
+			return ResponseEntity.ok(retrievedCoupons);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
-	public Collection<Coupon> findByDate(Date date) {
+
+	public ResponseEntity<Collection<Coupon>> findByDate(Date date) {
 		try {
-			return couponRepository.findByDate(date);
+			Collection<Coupon> retrievedCoupons = couponRepository.findByDate(date);
+			System.out.println("retrievedCoupons by date = " + date + "are ---> " + retrievedCoupons);
+			return ResponseEntity.ok(retrievedCoupons);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
-	
 
 }

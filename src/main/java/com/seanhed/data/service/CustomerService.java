@@ -1,22 +1,19 @@
 package com.seanhed.data.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.seanhed.beans.Coupon;
-import com.seanhed.beans.CouponType;
 import com.seanhed.beans.Customer;
 import com.seanhed.data.repo.CouponRepository;
 import com.seanhed.data.repo.CustomerRepository;
-import com.seanhed.utils.Database;
+import com.seanhed.utils.ResponseUtil;
 
 @Service
 @Transactional
@@ -30,49 +27,61 @@ public class CustomerService {
 
 	@PostConstruct
 	public void initDB() {
-//		customerRepository.deleteAll();
+		// customerRepository.deleteAll();
 
-//		Customer customer1 = new Customer("Sean", "1234");
-//		Customer customer2 = new Customer("Michael", "1234");
-//		Customer customer3 = new Customer("Tomer", "1234");
-//		Customer customer4 = new Customer("Aurora", "1234");
-//		Customer customer5 = new Customer("Maya", "1234");
-//
-//		customerRepository.save(customer1);
-//		customerRepository.save(customer2);
-//		customerRepository.save(customer3);
-//		customerRepository.save(customer4);
-//		customerRepository.save(customer5);
+//		 Customer customer1 = new Customer("Sean", "1234");
+//		 Customer customer2 = new Customer("Michael", "1234");
+//		 Customer customer3 = new Customer("Tomer", "1234");
+//		 Customer customer4 = new Customer("Aurora", "1234");
+//		 Customer customer5 = new Customer("Maya", "1234");
+//		
+//		 customerRepository.save(customer1);
+//		 customerRepository.save(customer2);
+//		 customerRepository.save(customer3);
+//		 customerRepository.save(customer4);
+//		 customerRepository.save(customer5);
 
 	}
 
-	public Customer getCustomer(long id) {
-		return customerRepository.getOne(id);
+	public ResponseEntity<Object> getCustomer(long id) {
+		Customer customer = customerRepository.getOne(id);
+		return ResponseEntity.ok(customer);
 	}
 
-	public List<Customer> getCustomers() {
-		return customerRepository.findAll();
+	public ResponseEntity<List<Object>> getCustomers() {
+		List<Customer> customers = customerRepository.findAll();
+		System.out.println("customer list - " + customers);
+		return ResponseUtil.generateSuccessMessageWithListBody(customers);
 	}
 
-	public Customer addCustomer(Customer customer) {
-		return customerRepository.save(customer);
+	public ResponseEntity<Object> addCustomer(Customer customer) {
+		customerRepository.save(customer);
+		return ResponseUtil.generateSuccessMessage("added customer");
 	}
 
-	public Customer buyCoupon(long customerID, long couponID) {
+	public ResponseEntity<Object> buyCoupon(long customerID, long couponID) {
+		System.out.println("1");
 		Customer customer = customerRepository.getOne(customerID);
 		Coupon coupon = couponRepository.getOne(couponID);
 		System.out.println("customer ---> " + customer + " , coupon ---> " + coupon);
-		customer.getCoupons().add(coupon);
-		coupon.setAmount(coupon.getAmount()-1);
+		if (coupon.getAmount() <= 0) {
+			return ResponseUtil.generateErrorCode(401, "no more coupons left to buy :( ");
+		} else {
+			customer.getCoupons().add(coupon);
+			coupon.setAmount(coupon.getAmount() - 1);
+		}
 		couponRepository.save(coupon);
-		return customerRepository.save(customer);
+		customerRepository.save(customer);
+		return ResponseUtil.generateSuccessMessage("Coupon Bought :) ");
 	}
 
-	public List<Customer> deleteCustomerByName(String name) {
-		return customerRepository.deleteByName(name);
+	public ResponseEntity<Object> deleteCustomerByName(String name) {
+		customerRepository.deleteByName(name);
+		return ResponseUtil.generateSuccessMessage("customer " + name + " deleted :(");
+
 	}
 
-	public Customer updateCustomer(long id, Customer newCustomer) {
+	public ResponseEntity<Object> updateCustomer(long id, Customer newCustomer) {
 		Customer existingCustomer = customerRepository.getOne(id);
 		if (newCustomer.getName() != null && !(existingCustomer.getName().equals(newCustomer.getName()))) {
 			existingCustomer.setName(newCustomer.getName());
@@ -83,17 +92,18 @@ public class CustomerService {
 		if (newCustomer.getPassword() != null && !(existingCustomer.getPassword().equals(newCustomer.getPassword()))) {
 			existingCustomer.setPassword(newCustomer.getPassword());
 		}
-		//customerRepository.delete(id);
-		return customerRepository.save(existingCustomer);
+		customerRepository.save(existingCustomer);
+		System.out.println("updatedCustomer is - " + existingCustomer);
+		return ResponseEntity.ok(existingCustomer);
 	}
-	
-	public Customer deleteBoughtCoupon(long customerId, long couponId) {
+
+	public ResponseEntity<Object> deleteBoughtCoupon(long customerId, long couponId) {
 		Customer customer = customerRepository.getOne(customerId);
 		Coupon coupon = couponRepository.getOne(couponId);
 		System.out.println("customer - " + customer + ", coupon - " + coupon);
 		customer.getCoupons().remove(coupon);
 		customerRepository.save(customer);
-		return customer;
+		return ResponseEntity.ok(customer);
 	}
 
 }

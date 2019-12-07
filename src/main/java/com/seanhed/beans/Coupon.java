@@ -21,6 +21,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -28,6 +29,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.cache.spi.entry.StructuredCacheEntry;
+import org.springframework.context.annotation.Primary;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -156,7 +158,7 @@ public class Coupon {
 	}
 
 	/**
-	 * @return the image
+	 * @return the imageURL
 	 */
 	@Column
 	public String getImage() {
@@ -172,12 +174,6 @@ public class Coupon {
 		return customers;
 	}
 
-//	/**
-//	 * @return the imageURL
-//	 */
-//	public static String getImageURL() {
-//		return imageURL;
-//	}
 
 	@Override
 	public String toString() {

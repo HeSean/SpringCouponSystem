@@ -10,5 +10,9 @@ import com.seanhed.beans.Company;
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 
 	public List<Company> deleteByName(String name);
+	
+	public Company findByName(String name);
+	
+	
 
 }
