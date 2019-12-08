@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -54,9 +55,9 @@ public class Coupon {
 
 	private Date startDate = Date.from(Database.getStartInstant());
 	private Date endDate = Date.from(Database.getEndInstant());
-	
-//	private LocalDate startDate = LocalDate.of(2019, 01, 01);
-//	private LocalDate endDate = LocalDate.of(2019, 12, 01);
+
+	// private LocalDate startDate = LocalDate.of(2019, 01, 01);
+	// private LocalDate endDate = LocalDate.of(2019, 12, 01);
 
 	private int amount;
 	private CouponType type;
@@ -64,8 +65,7 @@ public class Coupon {
 	private double price;
 	private String image;
 
-
-	private List<Customer> customers;
+	private Collection<Customer> customers = new HashSet<>();
 
 	// CTOR
 	public Coupon(String title, int amount, CouponType type, String message, double price, String image) {
@@ -140,7 +140,6 @@ public class Coupon {
 		return type;
 	}
 
-
 	/**
 	 * @return the message
 	 */
@@ -168,12 +167,11 @@ public class Coupon {
 	/**
 	 * @return the customers
 	 */
-	@JsonBackReference
+	//@JsonBackReference(value="customers")
 	@ManyToMany(mappedBy = "coupons")
-	public List<Customer> getCustomers() {
+	public Collection<Customer> getCustomers() {
 		return customers;
 	}
-
 
 	@Override
 	public String toString() {
@@ -181,8 +179,5 @@ public class Coupon {
 				+ endDate + " | Amount = " + amount + " | Type = " + type + " | Message = " + message + " | Price = "
 				+ price + "]";
 	}
-
-
-
 
 }

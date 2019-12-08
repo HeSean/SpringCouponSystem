@@ -39,10 +39,10 @@ public class CouponController {
 	@Autowired
 	private CustomerService customerService;
 
-	// http://localhost:8080/coupon/getCoupon/1
-	@GetMapping("/getCoupon/{id}")
-	public ResponseEntity<Object> getCoupon(@PathVariable long id) {
-		return couponService.getCoupon(id);
+	// http://localhost:8080/coupon/getCoupon
+	@GetMapping("/getCoupon")
+	public ResponseEntity<Object> getCoupon(@RequestParam long couponId) {
+		return couponService.getCoupon(couponId);
 	}
 
 	// http://localhost:8080/coupon/getAll
@@ -56,40 +56,38 @@ public class CouponController {
 	// @RequestMapping(path="add",method = RequestMethod.POST, consumes =
 	// MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Object> addCoupon(@RequestBody Coupon coupon) {
-		// ResponseEntity.ok().body(savedCoupon);
 		return couponService.addCoupon(coupon);
 	}
 
 	// http://localhost:8080/coupon/deleteCoupon
 	@DeleteMapping("/deleteCoupon")
 	public ResponseEntity<Object> deleteCouponByName(
-			@RequestBody String name
-			//@RequestParam String name
+			@RequestParam String couponName
 			) {
-		return couponService.deleteCouponByName(name);
+		return couponService.deleteCouponByName(couponName);
 	}
 
-	// http://localhost:8080/coupon/deleteCouponById/{companyId}/{couponId}
-	@DeleteMapping("/deleteCouponById/{companyId}/{couponId}")
-	public ResponseEntity<Object> deleteCouponById(@PathVariable long companyId, @PathVariable long couponId) {
-		return companyService.deleteCreatedCoupon(companyId, couponId);
+	// http://localhost:8080/coupon/deleteCouponById
+	@DeleteMapping("/deleteCouponById")
+	public ResponseEntity<Object> deleteCouponById(@RequestParam long couponId) {
+		return couponService.deleteCouponById(couponId);
 	}
 
-	// http://localhost:8080/coupon/updateCoupon/1
-	@PutMapping("/updateCoupon/{id}")
-	public ResponseEntity<Object> updateCoupon(@PathVariable long id, @RequestBody Coupon coupon) {
-		return couponService.updateCoupon(id, coupon);
+	// http://localhost:8080/coupon/updateCoupon
+	@PutMapping("/updateCoupon")
+	public ResponseEntity<Object> updateCoupon(@RequestParam long couponId, @RequestBody Coupon coupon) {
+		return couponService.updateCoupon(couponId, coupon);
 	}
 
 	// http://localhost:8080/coupon/getCouponByType
-	@GetMapping("/getCouponByType/{type}")
-	public ResponseEntity<Collection<Coupon>> getCouponByType(@PathVariable CouponType type) {
+	@GetMapping("/getCouponByType")
+	public ResponseEntity<Collection<Coupon>> getCouponByType(@RequestParam CouponType type) {
 		return couponService.findByType(type);
 	}
 
 	// http://localhost:8080/coupon/getCouponByPrice
-	@GetMapping("/getCouponByPrice/{price}")
-	public ResponseEntity<Collection<Coupon>> getCouponByPrice(@PathVariable double price) {
+	@GetMapping("/getCouponByPrice")
+	public ResponseEntity<Collection<Coupon>> getCouponByPrice(@RequestParam double price) {
 		return couponService.findByPrice(price);
 	}
 

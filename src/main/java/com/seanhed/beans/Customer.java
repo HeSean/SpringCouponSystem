@@ -2,6 +2,7 @@ package com.seanhed.beans;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 import javax.persistence.CascadeType;
@@ -10,10 +11,12 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -31,7 +34,7 @@ public class Customer {
 	private String Name;
 	private String password;
 
-	private Collection<Coupon> coupons = new ArrayList<>();
+	private Collection<Coupon> coupons = new HashSet<>();
 
 	public Customer(long id, String custName) {
 		setId(id);
@@ -77,9 +80,9 @@ public class Customer {
 	/**
 	 * @return the coupons
 	 */
-	// cascade = CascadeType.ALL, fetch = FetchType.LAZY
-	// @JsonManagedReference
+	@JoinTable
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonBackReference
 	public Collection<Coupon> getCoupons() {
 		return coupons;
 	}

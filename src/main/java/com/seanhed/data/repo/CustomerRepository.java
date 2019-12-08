@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.seanhed.beans.Coupon;
 import com.seanhed.beans.Customer;
+
 @CrossOrigin(origins = "http://localhost:4200")
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
 	public List<Customer> deleteByName(String name);
 
+	@Query("select customer from Customer customer join fetch customer.coupons c where c.id=?1")
+	public List<Customer> findByCouponsLike(long id);
 
 }

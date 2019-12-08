@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.seanhed.beans.Company;
 import com.seanhed.beans.Coupon;
 import com.seanhed.beans.CouponType;
+import com.seanhed.beans.Customer;
 import com.seanhed.data.repo.CompanyRepository;
 import com.seanhed.data.repo.CouponRepository;
 import com.seanhed.data.repo.CustomerRepository;
@@ -64,37 +65,6 @@ public class CouponService {
 		company.getCoupons().add(coupon);
 		companyRepository.save(company);
 		return ResponseUtil.generateSuccessMessage("added coupon");
-	}
-
-	public void removeCouponFromCompanyCoupons(Coupon coupon) {
-		String byCompany = coupon.getMessage().substring(3);
-		Company company = companyRepository.findByName(byCompany);
-		System.out.println("retreived company before delete - " + company);
-		company.getCoupons().remove(coupon);
-		System.out.println("retreived company after delete - " + company);
-		companyRepository.save(company);
-		System.out.println("removed coupon from company coupons..");
-	}
-
-	public void removeCouponFromCustomerCoupons(Coupon coupon) {
-		System.out.println("coupon_customers before delete - " + coupon.getCustomers());
-		coupon.setCustomers(new ArrayList<>());
-		System.out.println("coupon_customers after delete - " + coupon.getCustomers());
-		couponRepository.save(coupon);
-	}
-
-	public void deleteCoupon(Coupon coupon) {
-		try {
-			System.out.println("starting to delete coupon ..");
-			removeCouponFromCompanyCoupons(coupon);
-			removeCouponFromCustomerCoupons(coupon);
-			couponRepository.delete(coupon.getId());
-//			couponRepository.deleteById(coupon.getId());
-			couponRepository.flush();
-			System.out.println("finished deleting coupon ..");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public ResponseEntity<Object> deleteCouponByName(String name) {
@@ -171,6 +141,43 @@ public class CouponService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	public void removeCouponFromCompanyCoupons(Coupon coupon) {
+		String byCompany = coupon.getMessage().substring(3);
+		Company company = companyRepository.findByName(byCompany);
+		System.out.println("retreived company before delete - " + company);
+		company.getCoupons().remove(coupon);
+		System.out.println("retreived company after delete - " + company);
+		companyRepository.save(company);
+		System.out.println("removed coupon from company coupons..");
+	}
+
+	public void removeCouponFromCustomerCoupons(Coupon coupon) {
+		System.out.println("coupon_customers before delete - " + coupon.getCustomers());
+		List<Customer> customers = customerRepository.findByCouponsLike(coupon.getId());
+		System.out.println("customer " + customers);
+		for (Customer customer : customers) {
+			System.out.println("retreived customer coupons before delete - " + customer);
+			customer.getCoupons().remove(coupon);
+			System.out.println("retreived customer coupons after delete - " + customer);
+			customerRepository.save(customer);
+		}
+		couponRepository.save(coupon);
+	}
+
+	public void deleteCoupon(Coupon coupon) {
+		try {
+			System.out.println("starting to delete coupon ..");
+			removeCouponFromCompanyCoupons(coupon);
+			removeCouponFromCustomerCoupons(coupon);
+			 couponRepository.delete(coupon.getId());
+//			 couponRepository.deleteById(coupon.getId());
+			 couponRepository.flush();
+			System.out.println("finished deleting coupon ..");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

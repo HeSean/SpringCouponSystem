@@ -2,6 +2,7 @@ package com.seanhed.beans;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 import javax.persistence.CascadeType;
@@ -29,7 +30,7 @@ public class Company {
 	private String Name;
 	private String password;
 	private String email;
-	private Collection<Coupon> coupons = new ArrayList<>();
+	private Collection<Coupon> coupons = new HashSet<>();
 	
 	
 	//first creation ctor

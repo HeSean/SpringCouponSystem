@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seanhed.beans.Company;
@@ -19,17 +20,17 @@ import com.seanhed.beans.Customer;
 import com.seanhed.data.service.CompanyService;
 
 @RestController
-@RequestMapping("/company/")
+@RequestMapping("/company")
 @CrossOrigin(origins = "http://localhost:4200")
 public class CompanyController {
 
 	@Autowired
 	private CompanyService service;
 
-	// http://localhost:8080/company/getCompany/1
-	@GetMapping("/getCompany/{id}")
-	public ResponseEntity<Object> getCompany(@PathVariable long id) {
-		return service.getCompany(id);
+	// http://localhost:8080/company/getCompany
+	@GetMapping("/getCompany")
+	public ResponseEntity<Object> getCompany(@RequestParam long companyId) {
+		return service.getCompany(companyId);
 	}
 
 	// http://localhost:8080/company/getAll
@@ -45,15 +46,15 @@ public class CompanyController {
 		return service.addCompany(company);
 	}
 
-	// http://localhost:8080/company/deleteCompany/YesPlanet
-	@DeleteMapping("/deleteCompany/{name}")
-	public ResponseEntity<Object> deleteCompany(@PathVariable String name) {
-		return service.deleteCompany(name);
+	// http://localhost:8080/company/deleteCompany
+	@DeleteMapping("/deleteCompany")
+	public ResponseEntity<Object> deleteCompany(@RequestParam String companyName) {
+		return service.deleteCompany(companyName);
 	}
 
-	// http://localhost:8080/company/updateCompany/1
-	@PutMapping("/updateCompany/{id}")
-	public ResponseEntity<Object> updateCompany(@PathVariable long id, @RequestBody Company company) {
-		return service.updateCompany(id, company);
+	// http://localhost:8080/company/updateCompany
+	@PutMapping("/updateCompany")
+	public ResponseEntity<Object> updateCompany(@RequestParam long companyId, @RequestBody Company company) {
+		return service.updateCompany(companyId, company);
 	}
 }

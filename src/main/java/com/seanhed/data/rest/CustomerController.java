@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seanhed.beans.Coupon;
@@ -19,17 +20,17 @@ import com.seanhed.beans.Customer;
 import com.seanhed.data.service.CustomerService;
 
 @RestController
-@RequestMapping("/customer/")
+@RequestMapping("/customer")
 @CrossOrigin(origins = "http://localhost:4200")
 public class CustomerController {
 
 	@Autowired
 	private CustomerService service;
 
-	// http://localhost:8080/customer/getCustomer/1
-	@GetMapping("/getCustomer/{id}")
-	public  ResponseEntity<Object> getCustomer(@PathVariable long id) {
-		return service.getCustomer(id);
+	// http://localhost:8080/customer/getCustomer
+	@GetMapping("/getCustomer")
+	public  ResponseEntity<Object> getCustomer(@RequestParam long customerId) {
+		return service.getCustomer(customerId);
 	}
 
 	// http://localhost:8080/customer/getAll
@@ -44,21 +45,21 @@ public class CustomerController {
 		return service.addCustomer(customer);
 	}
 
-	// http://localhost:8080/customer/buyCoupon/{customerId}
-	@PostMapping("/buyCoupon/{id}")
-	public ResponseEntity<Object> buyCoupon(@PathVariable long id, @RequestBody long couponID) {
-		return service.buyCoupon(id, couponID);
+	// http://localhost:8080/customer/buyCoupon
+	@PostMapping("/buyCoupon")
+	public ResponseEntity<Object> buyCoupon(@RequestParam long customerId, @RequestParam long couponId) {
+		return service.buyCoupon(customerId, couponId);
 	}
 
-	// http://localhost:8080/customer/deleteCustomer/Maya
-	@DeleteMapping("/deleteCustomer/{name}")
-	public ResponseEntity<Object> deleteCustomer(@PathVariable String name) {
-		return service.deleteCustomerByName(name);
+	// http://localhost:8080/customer/deleteCustomer
+	@DeleteMapping("/deleteCustomer")
+	public ResponseEntity<Object> deleteCustomer(@RequestParam String customerName) {
+		return service.deleteCustomerByName(customerName);
 	}
 
-	// http://localhost:8080/customer/updateCustomer/1
-	@PutMapping("/updateCustomer/{id}")
-	public ResponseEntity<Object> updateCustomer(@PathVariable long id, @RequestBody Customer customer) {
-		return service.updateCustomer(id, customer);
+	// http://localhost:8080/customer/updateCustomer
+	@PutMapping("/updateCustomer")
+	public ResponseEntity<Object> updateCustomer(@RequestParam long customerId, @RequestBody Customer customer) {
+		return service.updateCustomer(customerId, customer);
 	}
 }

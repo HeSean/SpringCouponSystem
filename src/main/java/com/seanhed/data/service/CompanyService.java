@@ -28,6 +28,7 @@ public class CompanyService {
 	@Autowired
 	private CouponRepository couponRepository;
 
+
 	@PostConstruct
 	public void initDB() {
 		//companyRepository.deleteAll();
@@ -92,18 +93,6 @@ public class CompanyService {
 		System.out.println("updated company is - " + existingCompany);
 		return ResponseEntity.ok(existingCompany);
 
-	}
-
-	public ResponseEntity<Object> deleteCreatedCoupon(long companyId, long couponId) {
-		Company company = companyRepository.getOne(companyId);
-		Coupon coupon = couponRepository.getOne(couponId);
-		System.out.println("company - " + company + ", coupon - " + coupon);
-		company.getCoupons().remove(coupon);
-		companyRepository.save(company);
-		couponRepository.delete(couponId);
-		couponRepository.flush();
-		return ResponseUtil
-				.generateSuccessMessage("deleted coupon with id of " + couponId + " by company " + companyId);
 	}
 
 }
