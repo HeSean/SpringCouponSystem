@@ -9,7 +9,7 @@ import com.seanhed.beans.Company;
 @CrossOrigin(origins = "http://localhost:4200")
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 
-	public List<Company> deleteByName(String name);
+	public Company deleteByName(String name);
 	
 	public Company findByName(String name);
 	

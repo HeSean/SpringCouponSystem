@@ -24,7 +24,6 @@ import com.seanhed.utils.Database;
 @SpringBootApplication(scanBasePackages = "com.seanhed")
 @EnableJpaRepositories("com.seanhed")
 @EntityScan(basePackages = "com.seanhed.beans")
-
 public class SpringCouponSystemApplication {
 
 	public static void main(String[] args) {
@@ -58,5 +57,6 @@ public class SpringCouponSystemApplication {
 
 
 	}
+	
 
 }

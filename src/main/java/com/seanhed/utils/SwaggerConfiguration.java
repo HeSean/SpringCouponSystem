@@ -1,4 +1,4 @@
-package com.seanhed.SpringCouponSystem;
+package com.seanhed.utils;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

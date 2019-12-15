@@ -36,6 +36,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seanhed.utils.Database;
 
 import lombok.AllArgsConstructor;
@@ -167,7 +168,8 @@ public class Coupon {
 	/**
 	 * @return the customers
 	 */
-	//@JsonBackReference(value="customers")
+	// @JsonBackReference(value="customers")
+	@JsonIgnore
 	@ManyToMany(mappedBy = "coupons")
 	public Collection<Customer> getCustomers() {
 		return customers;
