@@ -64,7 +64,7 @@ public class Customer {
 	/**
 	 * @return the custName
 	 */
-	@Column(unique = true)
+	@Column(unique = true,nullable=false)
 	public String getName() {
 		return Name;
 	}
@@ -72,7 +72,7 @@ public class Customer {
 	/**
 	 * @return the password
 	 */
-	@Column
+	@Column(nullable=false)
 	public String getPassword() {
 		return password;
 	}

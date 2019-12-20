@@ -43,7 +43,7 @@ public class LoginController {
 	}
 	
 	// http://localhost:8080/logout
-	@PostMapping("/logout")
+	@PostMapping("/blogout")
 	public ResponseEntity<Object> logout(@RequestParam String token, @RequestParam ClientType clientType) {
 		switch (clientType) {
 		case ADMINISTRATOR:

@@ -40,17 +40,17 @@ public class CustomerService implements CouponClient {
 	public void initDB() {
 		// customerRepository.deleteAll();
 
-		// Customer customer1 = new Customer("Sean", "1234");
-		// Customer customer2 = new Customer("Michael", "1234");
-		// Customer customer3 = new Customer("Tomer", "1234");
-		// Customer customer4 = new Customer("Aurora", "1234");
-		// Customer customer5 = new Customer("Maya", "1234");
-		//
-		// customerRepository.save(customer1);
-		// customerRepository.save(customer2);
-		// customerRepository.save(customer3);
-		// customerRepository.save(customer4);
-		// customerRepository.save(customer5);
+//		 Customer customer1 = new Customer("Sean", "1234");
+//		 Customer customer2 = new Customer("Michael", "1234");
+//		 Customer customer3 = new Customer("Tomer", "1234");
+//		 Customer customer4 = new Customer("Aurora", "1234");
+//		 Customer customer5 = new Customer("Maya", "1234");
+//		
+//		 customerRepository.save(customer1);
+//		 customerRepository.save(customer2);
+//		 customerRepository.save(customer3);
+//		 customerRepository.save(customer4);
+//		 customerRepository.save(customer5);
 	}
 
 	@Override
@@ -59,10 +59,14 @@ public class CustomerService implements CouponClient {
 			Customer customer = customerRepository.findByName(name);
 			if (customer != null) {
 				if (customer.getPassword().equals(password)) {
-					String token = UUID.randomUUID().toString();
-					tokens.put(token, customer.getId());
-					System.out.println("tokens after customer login -> " + tokens);
-					return ResponseUtil.generateSuccessMessage(token);
+					if (!tokens.containsValue(customer.getId())) {
+						String token = UUID.randomUUID().toString();
+						tokens.put(token, customer.getId());
+						System.out.println("tokens after customer login -> " + tokens);
+						return ResponseUtil.generateSuccessMessage(token);
+					} else {
+						return ResponseUtil.generateErrorCode(400, "customer already logged in");
+					}
 				}
 			} else {
 				return ResponseUtil.generateErrorCode(404, "customer details not found");
@@ -145,12 +149,7 @@ public class CustomerService implements CouponClient {
 				Customer customer = customerRepository.getOne(tokens.get(token));
 				Collection<Coupon> retrievedCoupons = customer.getCoupons();
 				System.out.println("retrievedCoupons are ---> " + retrievedCoupons);
-				ArrayList<Coupon> coupons = new ArrayList<>();
-				for (Coupon coupon : retrievedCoupons) {
-					if (retrievedCoupons.iterator().hasNext()) {
-						coupons.add(coupon);
-					}
-				}
+				ArrayList<Coupon> coupons = new ArrayList<>(retrievedCoupons);
 				Collections.sort(coupons, new Comparator<Coupon>() {
 					public int compare(Coupon c1, Coupon c2) {
 						return c1.getEndDate().compareTo(c2.getEndDate());

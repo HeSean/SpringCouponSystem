@@ -18,7 +18,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Table
 @Data
@@ -31,15 +30,14 @@ public class Company {
 	private String password;
 	private String email;
 	private Collection<Coupon> coupons = new HashSet<>();
-	
-	
-	//first creation ctor
+
+	// first creation ctor
 	public Company(String compName, String password, String email) {
 		setName(compName);
 		setPassword(password);
 		setEmail(email);
 	}
-	
+
 	public Company(long id, String compName, String email) {
 		setId(id);
 		setName(compName);
@@ -53,8 +51,6 @@ public class Company {
 		setEmail(email);
 	}
 
-	
-	
 	/**
 	 * @return the id
 	 */
@@ -63,49 +59,44 @@ public class Company {
 	public long getId() {
 		return id;
 	}
-	
-	
+
 	/**
 	 * @return the compName
 	 */
-	@Column(unique=true)
+	@Column(unique = true, nullable = false)
 	public String getName() {
 		return Name;
 	}
-	
-	
+
 	/**
 	 * @return the password
 	 */
-	@Column
+	@Column(nullable = false)
 	public String getPassword() {
 		return password;
 	}
-	
-	
+
 	/**
 	 * @return the email
 	 */
-	@Column
+	@Column(nullable = false)
 	public String getEmail() {
 		return email;
 	}
-	
-	
+
 	/**
 	 * @return the coupons
 	 */
-	//mappedBy="OwnedByCompany",cascade = { CascadeType.ALL }
-	@OneToMany(cascade=CascadeType.ALL)
+	// mappedBy="OwnedByCompany",cascade = { CascadeType.ALL }
+	@OneToMany(cascade = CascadeType.ALL)
 	public Collection<Coupon> getCoupons() {
 		return coupons;
 	}
-	
-	
+
 	@Override
 	public String toString() {
 		return "Company [ ID = " + id + " | Company Name = " + Name + " | Password = " + password
 				+ " | Email Address = " + email + " | Available Coupons = " + coupons + "]";
 	}
-	
+
 }

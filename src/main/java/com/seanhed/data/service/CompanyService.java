@@ -2,7 +2,11 @@ package com.seanhed.data.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -24,6 +28,8 @@ import com.seanhed.data.repo.CouponRepository;
 import com.seanhed.data.repo.CustomerRepository;
 import com.seanhed.utils.Database;
 import com.seanhed.utils.ResponseUtil;
+
+import io.swagger.models.SecurityScope;
 
 @Service
 @Transactional
@@ -48,7 +54,7 @@ public class CompanyService implements CouponClient {
 //		 Company company3 = new Company("Japanika", "1234", "Japanika@gmail.com");
 //		
 //		 List<Coupon> coupons = new ArrayList<>();
-//		 coupons.add(new Coupon("Seventh Popcorn Free", 5, CouponType.FOOD, "By	 YesPlanet", 15, Database.getImageURL()));
+//		 coupons.add(new Coupon("Seventh Popcorn Free", 5, CouponType.FOOD, "By YesPlanet", 15, Database.getImageURL()));
 //		 coupons.add(new Coupon("1+1 on drinks", 5, CouponType.FOOD, "By YesPlanet",
 //		 15, Database.getImageURL()));
 //		 coupons.add(new Coupon("Free Tent with Lederman swiss knife", 5,
@@ -74,10 +80,14 @@ public class CompanyService implements CouponClient {
 			Company company = companyRepository.findByName(name);
 			if (company != null) {
 				if (company.getPassword().equals(password)) {
-					String token = UUID.randomUUID().toString();
-					tokens.put(token, company.getId());
-					System.out.println("tokens after company login -> " + tokens);
-					return ResponseUtil.generateSuccessMessage(token);
+					if (!tokens.containsValue(company.getId())) {
+						String token = UUID.randomUUID().toString();
+						tokens.put(token, company.getId());
+						System.out.println("tokens after company login -> " + tokens);
+						return ResponseUtil.generateSuccessMessage(token);
+					} else {
+						return ResponseUtil.generateErrorCode(400, "company already logged in");
+					}
 				}
 			} else {
 				return ResponseUtil.generateErrorCode(404, "company details not found");
@@ -95,6 +105,48 @@ public class CompanyService implements CouponClient {
 			return ResponseUtil.generateSuccessMessage("Logged out");
 		} else {
 			return ResponseUtil.generateErrorCode(400, "failed to log out");
+		}
+	}
+
+	// getCoupon
+	public ResponseEntity<Object> getCoupon(String token, long id) {
+		System.out.println("tokens -> " + tokens);
+		if (tokens.containsKey(token)) {
+			try {
+				Coupon coupon = couponRepository.getOne(id);
+				return ResponseEntity.ok(coupon);
+			} catch (Exception e) {
+				return ResponseUtil.generateErrorCode(500, "Unable to findCoupon with id " + id);
+			}
+		} else {
+			return ResponseUtil.generateErrorCode(400, "token expired");
+		}
+	}
+
+	// getAllCoupon
+	public ResponseEntity<Object> getAllCoupons(String token) {
+		System.out.println("tokens -> " + tokens);
+		if (tokens.containsKey(token)) {
+			Company currentCompany = companyRepository.getOne(tokens.get(token));
+			return ResponseEntity.ok(currentCompany.getCoupons());
+		} else {
+			return ResponseUtil.generateErrorCode(400, "token expired");
+		}
+	}
+
+	// createCoupon
+	public ResponseEntity<Object> createCoupon(String token, Coupon coupon) {
+		System.out.println("tokens -> " + tokens);
+		if (tokens.containsKey(token)) {
+			Company company = companyRepository.findById(tokens.get(token));
+			System.out.println("hey ---------------------> " + coupon);
+			System.out.println("retreived company - " + company);
+			company.getCoupons().add(coupon);
+			companyRepository.save(company);
+			couponRepository.save(coupon);
+			return ResponseUtil.generateSuccessMessage("added coupon");
+		} else {
+			return ResponseUtil.generateErrorCode(400, "token expired");
 		}
 	}
 
@@ -139,9 +191,20 @@ public class CompanyService implements CouponClient {
 		System.out.println("tokens -> " + tokens);
 		if (tokens.containsKey(token)) {
 			try {
-				Collection<Coupon> retrievedCoupons = couponRepository.findByType(type);
-				System.out.println("retrievedCoupons by type = " + type + "are ---> " + retrievedCoupons);
-				return ResponseEntity.ok(retrievedCoupons);
+				Company currentCompany = companyRepository.getOne(tokens.get(token));
+				System.out.println("currentCompany " + currentCompany + "wanted type is " + type);
+				Collection<Coupon> couponsCollection = currentCompany.getCoupons();
+				System.out.println("coupons collection " + couponsCollection);
+				Collection<Coupon> couponsOfWantedType = new LinkedHashSet<>();
+				for (Iterator<Coupon> iterator = couponsCollection.iterator(); iterator.hasNext();) {
+					Coupon coupon = iterator.next();
+					System.out.println("coupon type is " + coupon.getType() + "   and the wanted type is  " + type);
+					if (coupon.getType().equals(type)) {
+						couponsOfWantedType.add(coupon);
+					}
+				}
+				System.out.println("couponsOfWantedType after iteratorz " + couponsOfWantedType);
+				return ResponseEntity.ok(couponsOfWantedType);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -151,57 +214,13 @@ public class CompanyService implements CouponClient {
 		}
 	}
 
-	// getCoupon
-	public ResponseEntity<Object> getCoupon(String token, long id) {
-		System.out.println("tokens -> " + tokens);
-		if (tokens.containsKey(token)) {
-			try {
-				Coupon coupon = couponRepository.getOne(id);
-				return ResponseEntity.ok(coupon);
-			} catch (Exception e) {
-				return ResponseUtil.generateErrorCode(500, "Unable to findCoupon with id " + id);
-			}
-		} else {
-			return ResponseUtil.generateErrorCode(400, "token expired");
-		}
-	}
-
-	// getAllCoupon
-	public ResponseEntity<Object> getAllCoupons(String token) {
-		System.out.println("tokens -> " + tokens);
-		if (tokens.containsKey(token)) {
-			List<Coupon> coupons = couponRepository.findAll();
-			System.out.println("coupons list - " + coupons);
-			return ResponseEntity.ok(coupons);
-		} else {
-			return ResponseUtil.generateErrorCode(400, "token expired");
-		}
-	}
-
-	// createCoupon
-	public ResponseEntity<Object> createCoupon(String token, Coupon coupon) {
-		System.out.println("tokens -> " + tokens);
-		if (tokens.containsKey(token)) {
-			String byCompany = coupon.getMessage().substring(3);
-			Company company = companyRepository.findByName(byCompany);
-			System.out.println("hey ---------------------> " + coupon);
-			couponRepository.save(coupon);
-			System.out.println("retreived company - " + company);
-			company.getCoupons().add(coupon);
-			companyRepository.save(company);
-			return ResponseUtil.generateSuccessMessage("added coupon");
-		} else {
-			return ResponseUtil.generateErrorCode(400, "token expired");
-		}
-	}
-
 	// removeCoupon
 	public ResponseEntity<Object> deleteCouponByName(String token, String name) {
 		System.out.println("tokens -> " + tokens);
 		if (tokens.containsKey(token)) {
-		Coupon coupon = couponRepository.findByName(name);
-		deleteCoupon(coupon);
-		return ResponseUtil.generateSuccessMessage("coupon " + name + " deleted :(");
+			Coupon coupon = couponRepository.findByName(name);
+			deleteCoupon(coupon);
+			return ResponseUtil.generateSuccessMessage("coupon " + name + " deleted :(");
 		} else {
 			return ResponseUtil.generateErrorCode(400, "token expired");
 		}
@@ -210,9 +229,9 @@ public class CompanyService implements CouponClient {
 	public ResponseEntity<Object> deleteCouponById(String token, long id) {
 		System.out.println("tokens -> " + tokens);
 		if (tokens.containsKey(token)) {
-		Coupon coupon = couponRepository.findById(id);
-		deleteCoupon(coupon);
-		return ResponseUtil.generateSuccessMessage("coupon with id of " + id + " deleted :(");
+			Coupon coupon = couponRepository.findById(id);
+			deleteCoupon(coupon);
+			return ResponseUtil.generateSuccessMessage("coupon with id of " + id + " deleted :(");
 		} else {
 			return ResponseUtil.generateErrorCode(400, "token expired");
 		}
@@ -225,6 +244,7 @@ public class CompanyService implements CouponClient {
 		company.getCoupons().remove(coupon);
 		System.out.println("retreived company after delete - " + company);
 		companyRepository.save(company);
+		couponRepository.flush();
 		System.out.println("removed coupon from company coupons..");
 	}
 

@@ -94,6 +94,7 @@ public class Coupon {
 	 */
 	@Id
 	@GeneratedValue
+	@Column(nullable=false)
 	public long getId() {
 		return id;
 	}
@@ -101,7 +102,7 @@ public class Coupon {
 	/**
 	 * @return the title
 	 */
-	@Column(unique = true)
+	@Column(unique = true,nullable=false)
 	public String getName() {
 		return name;
 	}
@@ -109,7 +110,7 @@ public class Coupon {
 	/**
 	 * @return the startDate
 	 */
-	@Column
+	@Column(nullable=false)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	public Date getStartDate() {
 		return startDate;
@@ -118,7 +119,7 @@ public class Coupon {
 	/**
 	 * @return the endDate
 	 */
-	@Column
+	@Column(nullable=false)
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	public Date getEndDate() {
 		return endDate;
@@ -127,7 +128,8 @@ public class Coupon {
 	/**
 	 * @return the amount
 	 */
-	@Column
+	@Column(nullable=false)
+	//@JsonIgnore
 	public int getAmount() {
 		return amount;
 	}
@@ -135,7 +137,7 @@ public class Coupon {
 	/**
 	 * @return the type
 	 */
-	@Column
+	@Column(nullable=false)
 	@Enumerated(EnumType.STRING)
 	public CouponType getType() {
 		return type;
@@ -144,7 +146,7 @@ public class Coupon {
 	/**
 	 * @return the message
 	 */
-	@Column
+	@Column(nullable=false)
 	public String getMessage() {
 		return message;
 	}
@@ -152,7 +154,7 @@ public class Coupon {
 	/**
 	 * @return the price
 	 */
-	@Column
+	@Column(nullable=false)
 	public double getPrice() {
 		return price;
 	}
@@ -160,7 +162,7 @@ public class Coupon {
 	/**
 	 * @return the imageURL
 	 */
-	@Column
+	@Column(nullable=false)
 	public String getImage() {
 		return image;
 	}
