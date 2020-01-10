@@ -67,10 +67,10 @@ public class AdminController {
 		return service.getCustomers(token);
 	}
 
-	// http://localhost:8080/admin/addCustomer
-	@PostMapping("addCustomer")
-	public ResponseEntity<Object> addCustomer(@RequestParam String token, @RequestBody Customer customer) {
-		return service.addCustomer(token,customer);
+	// http://localhost:8080/admin/createCustomer
+	@PostMapping("createCustomer")
+	public ResponseEntity<Object> createCustomer(@RequestParam String token, @RequestBody Customer customer) {
+		return service.createCustomer(token,customer);
 	}
 
 	// http://localhost:8080/admin/deleteCustomer

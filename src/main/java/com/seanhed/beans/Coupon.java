@@ -54,8 +54,8 @@ public class Coupon {
 	private long id;
 	private String name;
 
-	private Date startDate = Date.from(Database.getStartInstant());
-	private Date endDate = Date.from(Database.getEndInstant());
+	private Date startDate; // = Date.from(Database.getStartInstant());
+	private Date endDate; // = Date.from(Database.getEndInstant());
 
 	// private LocalDate startDate = LocalDate.of(2019, 01, 01);
 	// private LocalDate endDate = LocalDate.of(2019, 12, 01);
@@ -89,12 +89,24 @@ public class Coupon {
 		setImage(imageURL);
 	}
 
+	public Coupon(String name, int amount, CouponType type, String message, double price, String image, Date startDate,
+			Date endDate) {
+		setName(name);
+		setAmount(amount);
+		setType(type);
+		setMessage(message);
+		setPrice(price);
+		setImage(imageURL);
+		setStartDate(startDate);
+		setEndDate(endDate);
+	}
+
 	/**
 	 * @return the id
 	 */
 	@Id
 	@GeneratedValue
-	@Column(nullable=false)
+	@Column(nullable = false)
 	public long getId() {
 		return id;
 	}
@@ -102,7 +114,7 @@ public class Coupon {
 	/**
 	 * @return the title
 	 */
-	@Column(unique = true,nullable=false)
+	@Column(unique = true, nullable = false)
 	public String getName() {
 		return name;
 	}
@@ -110,7 +122,7 @@ public class Coupon {
 	/**
 	 * @return the startDate
 	 */
-	@Column(nullable=false)
+	@Column(nullable = false)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	public Date getStartDate() {
 		return startDate;
@@ -119,7 +131,7 @@ public class Coupon {
 	/**
 	 * @return the endDate
 	 */
-	@Column(nullable=false)
+	@Column(nullable = false)
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	public Date getEndDate() {
 		return endDate;
@@ -128,8 +140,8 @@ public class Coupon {
 	/**
 	 * @return the amount
 	 */
-	@Column(nullable=false)
-	//@JsonIgnore
+	@Column(nullable = false)
+	// @JsonIgnore
 	public int getAmount() {
 		return amount;
 	}
@@ -137,7 +149,7 @@ public class Coupon {
 	/**
 	 * @return the type
 	 */
-	@Column(nullable=false)
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	public CouponType getType() {
 		return type;
@@ -146,7 +158,7 @@ public class Coupon {
 	/**
 	 * @return the message
 	 */
-	@Column(nullable=false)
+	@Column(nullable = false)
 	public String getMessage() {
 		return message;
 	}
@@ -154,7 +166,7 @@ public class Coupon {
 	/**
 	 * @return the price
 	 */
-	@Column(nullable=false)
+	@Column(nullable = false)
 	public double getPrice() {
 		return price;
 	}
@@ -162,7 +174,7 @@ public class Coupon {
 	/**
 	 * @return the imageURL
 	 */
-	@Column(nullable=false)
+	@Column(nullable = false)
 	public String getImage() {
 		return image;
 	}

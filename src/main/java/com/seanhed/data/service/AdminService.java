@@ -37,7 +37,7 @@ public class AdminService implements CouponClient {
 				String token = UUID.randomUUID().toString();
 				tokens.put(token, new Random().nextLong());
 				System.out.println("tokens after admin login -> " + tokens);
-				return ResponseEntity.ok(token);
+				return ResponseUtil.generateSuccessMessage(token);
 			}
 		}
 		return ResponseUtil.generateErrorCode(400, "name or password are incorrect");
@@ -133,9 +133,9 @@ public class AdminService implements CouponClient {
 			if (newCompany.getEmail() != null && !(existingCompany.getEmail().equals(newCompany.getEmail()))) {
 				existingCompany.setEmail(newCompany.getEmail());
 			}
-			if (newCompany.getCoupons() != null && !(existingCompany.getCoupons().equals(newCompany.getCoupons()))) {
-				existingCompany.setCoupons(newCompany.getCoupons());
-			}
+//			if (newCompany.getCoupons() != null && !(existingCompany.getCoupons().equals(newCompany.getCoupons()))) {
+//				existingCompany.setCoupons(newCompany.getCoupons());
+//			}
 			try {
 				companyRepository.save(existingCompany);
 				System.out.println("updated company is - " + existingCompany);
@@ -170,7 +170,7 @@ public class AdminService implements CouponClient {
 	}
 
 	// createCustomer
-	public ResponseEntity<Object> addCustomer(String token, Customer customer) {
+	public ResponseEntity<Object> createCustomer(String token, Customer customer) {
 		if (tokens.containsKey(token)) {
 			customerRepository.save(customer);
 			return ResponseUtil.generateSuccessMessage("added customer");

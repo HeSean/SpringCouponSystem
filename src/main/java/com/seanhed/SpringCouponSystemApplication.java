@@ -1,4 +1,4 @@
-package com.seanhed.SpringCouponSystem;
+package com.seanhed;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -33,32 +33,16 @@ public class SpringCouponSystemApplication {
 		System.out.println("Go!");
 		CouponRepository couponRepository = context.getBean(CouponRepository.class);
 		CustomerRepository customerRepository = context.getBean(CustomerRepository.class);
-		CustomerService customerService = context.getBean(CustomerService.class);
 
 		List<Coupon> coupons = couponRepository.findAll();
 		List<Customer> customers = customerRepository.findAll();
 
-		
-		LocalDate localDate = LocalDate.of(2019, 01, 01);
-		System.out.println("localDate " + localDate);
-		
+		// LocalDate localDate = LocalDate.of(2019, 01, 01);
+		// System.out.println("localDate " + localDate);
 
 		System.out.println("Coupons - " + coupons);
 		System.out.println("customers - " + customers);
-		
 		System.out.println("******************");
-
-
-		
-//		System.out.println(customerService.buyCoupon(customers.get(0).getId(),coupons.get(0).getId()));
-//		System.out.println(customerService.buyCoupon(customers.get(1).getId(),coupons.get(0).getId()));
-//		System.out.println(customerService.buyCoupon(customers.get(2).getId(),coupons.get(0).getId()));
-//		System.out.println(customerService.buyCoupon(customers.get(0).getId(),coupons.get(0).getId()));
-//		System.out.println(customerService.buyCoupon(customers.get(1).getId(),coupons.get(0).getId()));
-//		System.out.println(customerService.buyCoupon(customers.get(2).getId(),coupons.get(0).getId()));
-
-
 	}
-	
 
 }
