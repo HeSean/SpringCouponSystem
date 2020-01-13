@@ -1,12 +1,17 @@
 package com.seanhed.beans;
 
-	public enum CouponType {
-		RESTAURANTS ,
-		ELECTRICITY,
-		FOOD,
-		HEALTH,
-		SPORTS,
-		CAMPING,
-		TRAVELLING
-}
+public enum CouponType {
+	Restaurants("Restaurants") ,
+	Electricity("Electricity"),
+	Food("Food"),
+	Health("Health"),
+	Sports("Sports"),
+	Camping("Camping"),
+	Travelling("Travelling");
+		
+		private String CouponType;
 
+		 private CouponType (String value) {
+		         this. CouponType = value;
+		 }
+}

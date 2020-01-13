@@ -42,17 +42,17 @@ public class CustomerService implements CouponClient {
 	public void initDB() {
 		// customerRepository.deleteAll();
 
-		// Customer customer1 = new Customer("Sean", "1234");
-		// Customer customer2 = new Customer("Michael", "1234");
-		// Customer customer3 = new Customer("Tomer", "1234");
-		// Customer customer4 = new Customer("Aurora", "1234");
-		// Customer customer5 = new Customer("Maya", "1234");
-		//
-		// customerRepository.save(customer1);
-		// customerRepository.save(customer2);
-		// customerRepository.save(customer3);
-		// customerRepository.save(customer4);
-		// customerRepository.save(customer5);
+		 Customer customer1 = new Customer("Sean", "1234");
+		 Customer customer2 = new Customer("Michael", "1234");
+		 Customer customer3 = new Customer("Tomer", "1234");
+		 Customer customer4 = new Customer("Aurora", "1234");
+		 Customer customer5 = new Customer("Maya", "1234");
+		
+		 customerRepository.save(customer1);
+		 customerRepository.save(customer2);
+		 customerRepository.save(customer3);
+		 customerRepository.save(customer4);
+		 customerRepository.save(customer5);
 	}
 
 	@Override

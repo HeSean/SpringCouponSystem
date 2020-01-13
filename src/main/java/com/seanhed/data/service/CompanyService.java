@@ -1,5 +1,7 @@
 package com.seanhed.data.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,6 +19,7 @@ import java.util.function.Consumer;
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
+import org.junit.jupiter.params.shadow.com.univocity.parsers.conversions.UpperCaseConversion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ import org.springframework.stereotype.Service;
 import com.seanhed.beans.ClientType;
 import com.seanhed.beans.Company;
 import com.seanhed.beans.Coupon;
+import com.seanhed.beans.CouponDateString;
 import com.seanhed.beans.CouponType;
 import com.seanhed.beans.Customer;
 import com.seanhed.data.repo.CompanyRepository;
@@ -52,33 +56,28 @@ public class CompanyService implements CouponClient {
 	@PostConstruct
 	public void initDB() {
 		// companyRepository.deleteAll();
-//		 Company company1 = new Company("Yesplanet", "1234", "Yesplanet@gmail.com");
-//		 Company company2 = new Company("Hagor", "1234", "Hagor@gmail.com");
-//		 Company company3 = new Company("Japanika", "1234", "Japanika@gmail.com");
-//		
-//		 List<Coupon> coupons = new ArrayList<>();
-//		 coupons.add(new Coupon("Seventh Popcorn Free", 5, CouponType.FOOD, "By YesPlanet", 15, Database.getImageURL(),
-//		 Date.from(Database.getStartInstant()), Date.from(Database.getEndInstant())));
-//		 coupons.add(new Coupon("1+1 on drinks", 5, CouponType.FOOD, "By YesPlanet",
-//		 15, Database.getImageURL(),
-//		 Date.from(Database.getStartInstant()), Date.from(Database.getEndInstant())));
-//		 coupons.add(new Coupon("Free Tent with Lederman swiss knife", 5,
-//		 CouponType.CAMPING, "By Hagor", 15,
-//		 Database.getImageURL(), Date.from(Database.getStartInstant()),
-//		 Date.from(Database.getEndInstant())));
-//		 coupons.add(new Coupon("Bonus ChickenWing with takeout order", 5,
-//		 CouponType.FOOD, "By Japanika", 15,
-//		 Database.getImageURL(), Date.from(Database.getStartInstant()),
-//		 Date.from(Database.getEndInstant())));
-//		
-//		 company1.getCoupons().add(coupons.get(0));
-//		 company1.getCoupons().add(coupons.get(1));
-//		 company2.getCoupons().add(coupons.get(2));
-//		 company3.getCoupons().add(coupons.get(3));
-//		
-//		 companyRepository.save(company1);
-//		 companyRepository.save(company2);
-//		 companyRepository.save(company3);
+		Company company1 = new Company("Yesplanet", "1234", "Yesplanet@gmail.com");
+		Company company2 = new Company("Hagor", "1234", "Hagor@gmail.com");
+		Company company3 = new Company("Japanika", "1234", "Japanika@gmail.com");
+
+		List<Coupon> coupons = new ArrayList<>();
+		coupons.add(new Coupon("Seventh Popcorn Free", 5, CouponType.Food, "By YesPlanet", 15, Database.getImageURL(),
+				Date.from(Database.getStartInstant()), Date.from(Database.getEndInstant()), 1));
+		coupons.add(new Coupon("1+1 on drinks", 5, CouponType.Food, "By YesPlanet", 15, Database.getImageURL(),
+				Date.from(Database.getStartInstant()), Date.from(Database.getEndInstant()), 1));
+		coupons.add(new Coupon("Free Tent with Lederman swiss knife", 5, CouponType.Camping, "By Hagor", 15,
+				Database.getImageURL(), Date.from(Database.getStartInstant()), Date.from(Database.getEndInstant()), 4));
+		coupons.add(new Coupon("Bonus ChickenWing with takeout order", 5, CouponType.Food, "By Japanika", 15,
+				Database.getImageURL(), Date.from(Database.getStartInstant()), Date.from(Database.getEndInstant()), 6));
+
+		company1.getCoupons().add(coupons.get(0));
+		company1.getCoupons().add(coupons.get(1));
+		company2.getCoupons().add(coupons.get(2));
+		company3.getCoupons().add(coupons.get(3));
+
+		companyRepository.save(company1);
+		companyRepository.save(company2);
+		companyRepository.save(company3);
 	}
 
 	@Override
@@ -140,14 +139,26 @@ public class CompanyService implements CouponClient {
 	}
 
 	// createCoupon
-	public ResponseEntity<Object> createCoupon(String token, Coupon coupon) {
+	public ResponseEntity<Object> createCoupon(String token, CouponDateString coupon) throws ParseException {
 		System.out.println("tokens -> " + tokens);
 		if (tokens.containsKey(token)) {
 			Optional<Company> company = companyRepository.findById(tokens.get(token));
-			System.out.println("hey ---------------------> " + coupon);
-			System.out.println("retreived company - " + company.get());
 			if (company.isPresent()) {
-				company.get().getCoupons().add(coupon);
+				System.out.println("retreived company - " + company.get());
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+				Coupon newCoupon = new Coupon();
+				newCoupon.setCompanyId(company.get().getId());
+				newCoupon.setName(coupon.getName());
+				System.out.println(formatter.parse(coupon.getStartDate()));
+				newCoupon.setStartDate(formatter.parse(coupon.getStartDate()));
+				newCoupon.setEndDate(formatter.parse(coupon.getEndDate()));
+				newCoupon.setAmount(coupon.getAmount());
+				System.out.println(CouponType.valueOf(coupon.getType()));
+				newCoupon.setType(CouponType.valueOf(coupon.getType()));
+				newCoupon.setMessage(coupon.getMessage());
+				newCoupon.setPrice(coupon.getPrice());
+				newCoupon.setImage(coupon.getImage());
+				company.get().getCoupons().add(newCoupon);
 				companyRepository.save(company.get());
 			}
 			return ResponseUtil.generateSuccessMessage("added coupon");
@@ -157,7 +168,8 @@ public class CompanyService implements CouponClient {
 	}
 
 	// updateCoupon
-	public ResponseEntity<Object> updateCoupon(String token, long couponId, Coupon newCoupon) {
+	public ResponseEntity<Object> updateCoupon(String token, long couponId, CouponDateString newCoupon)
+			throws ParseException {
 		System.out.println("tokens -> " + tokens);
 		if (tokens.containsKey(token)) {
 			Coupon existingCoupon = couponRepository.getOne(couponId);
@@ -170,11 +182,17 @@ public class CompanyService implements CouponClient {
 			if (!(existingCoupon.getMessage().equals(newCoupon.getMessage())) && newCoupon.getMessage() != null) {
 				existingCoupon.setMessage(newCoupon.getMessage());
 			}
-			if (!(existingCoupon.getStartDate().equals(newCoupon.getStartDate())) && newCoupon.getStartDate() != null) {
-				existingCoupon.setStartDate(newCoupon.getStartDate());
+			if (newCoupon.getStartDate() != null && !newCoupon.getStartDate().isEmpty()) {
+				Date newStartDate = Database.parseDate(newCoupon.getStartDate());
+				if (!(existingCoupon.getStartDate().equals(newStartDate)) && newStartDate != null) {
+					existingCoupon.setStartDate(newStartDate);
+				}
 			}
-			if (!(existingCoupon.getEndDate().equals(newCoupon.getEndDate())) && newCoupon.getEndDate() != null) {
-				existingCoupon.setEndDate(newCoupon.getEndDate());
+			if (newCoupon.getEndDate() != null && !newCoupon.getEndDate().isEmpty()) {
+				Date newEndDate = Database.parseDate(newCoupon.getEndDate());
+				if (!(existingCoupon.getEndDate().equals(newEndDate)) && newEndDate != null) {
+					existingCoupon.setEndDate(newEndDate);
+				}
 			}
 			if (existingCoupon.getAmount() != newCoupon.getAmount() && newCoupon.getAmount() > 0) {
 				existingCoupon.setAmount(newCoupon.getAmount());
@@ -182,8 +200,8 @@ public class CompanyService implements CouponClient {
 			if (existingCoupon.getPrice() != newCoupon.getPrice() && newCoupon.getPrice() > 0) {
 				existingCoupon.setPrice(newCoupon.getPrice());
 			}
-			if (existingCoupon.getType() != newCoupon.getType() && newCoupon.getType() != null) {
-				existingCoupon.setType(newCoupon.getType());
+			if (existingCoupon.getType() != CouponType.valueOf(newCoupon.getType()) && newCoupon.getType() != null) {
+				existingCoupon.setType(CouponType.valueOf(newCoupon.getType()));
 			}
 			couponRepository.save(existingCoupon);
 			return ResponseUtil.generateSuccessMessage("updated coupon");
@@ -244,8 +262,7 @@ public class CompanyService implements CouponClient {
 	}
 
 	public void removeCouponFromCompanyCoupons(Coupon coupon) {
-		String byCompany = coupon.getMessage().substring(3);
-		Company company = companyRepository.findByName(byCompany);
+		Company company = companyRepository.findById(coupon.getCompanyId());
 		System.out.println("retreived company before delete - " + company);
 		company.getCoupons().remove(coupon);
 		System.out.println("retreived company after delete - " + company);

@@ -1,5 +1,6 @@
 package com.seanhed.data.controller;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.seanhed.beans.Company;
 import com.seanhed.beans.Coupon;
+import com.seanhed.beans.CouponDateString;
 import com.seanhed.beans.CouponType;
 import com.seanhed.beans.Customer;
 import com.seanhed.data.service.CompanyService;
+import com.seanhed.utils.ResponseUtil;
 
 @RestController
 @RequestMapping("/company")
@@ -43,8 +46,12 @@ public class CompanyController {
 
 	// http://localhost:8080/company/createCoupon
 	@PostMapping("createCoupon")
-	public ResponseEntity<Object> createCoupon(@RequestParam String token, @RequestBody Coupon coupon) {
-		return companyService.createCoupon(token, coupon);
+	public ResponseEntity<Object> createCoupon(@RequestParam String token, @RequestBody CouponDateString coupon) {
+		try {
+			return companyService.createCoupon(token, coupon);
+		} catch (ParseException e) {
+			return ResponseUtil.generateErrorCode(404, "failed to parse date");
+		}
 	}
 
 	// http://localhost:8080/company/deleteCoupon
@@ -62,8 +69,12 @@ public class CompanyController {
 	// http://localhost:8080/company/updateCoupon
 	@PutMapping("/updateCoupon")
 	public ResponseEntity<Object> updateCoupon(@RequestParam String token, @RequestParam long couponId,
-			@RequestBody Coupon coupon) {
-		return companyService.updateCoupon(token, couponId, coupon);
+			@RequestBody CouponDateString coupon)  {
+		try {
+			return companyService.updateCoupon(token, couponId, coupon);
+		} catch (ParseException e) {
+			return ResponseUtil.generateErrorCode(404, "failed to parse date");
+		}
 	}
 
 	// http://localhost:8080/company/getCouponByType

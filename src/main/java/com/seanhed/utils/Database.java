@@ -3,6 +3,7 @@ package com.seanhed.utils;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -23,6 +24,12 @@ public class Database {
 	public static Instant getEndInstant() {
 		return endInstant;
 	}
+	
+	public static Date parseDate(String str) {
+		return Date.from(Instant.parse(str.concat("T16:45:42.01Z")));
+	}
+	
+	
 
 
 

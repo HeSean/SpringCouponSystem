@@ -1,5 +1,6 @@
 package com.seanhed.beans;
 
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -18,20 +19,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Coupon {
+public class CouponDateString {
 
 	private static String imageURL = "https://tinyurl.com/y3rauvft";
 	private long id;
 	private String name;
-	private Date startDate; // = Date.from(Database.getStartInstant());
-	private Date endDate; // = Date.from(Database.getEndInstant());
+	private String startDate; // = Date.from(Database.getStartInstant());
+	private String endDate; // = Date.from(Database.getEndInstant());
 	private int amount;
-	private CouponType type;
+	private String type;
 	private String message;
 	private double price;
 	private String image;
@@ -39,30 +39,8 @@ public class Coupon {
 
 	private Collection<Customer> customers = new HashSet<>();
 
-	// // CTOR
-	// public Coupon(String name, int amount, CouponType type, String message,
-	// double price, String image) {
-	// setName(name);
-	// setAmount(amount);
-	// setType(type);
-	// setMessage(message);
-	// setPrice(price);
-	// setImage(imageURL);
-	// }
-
-	// new coupon with specified ID
-	public Coupon(Long id, String name, int amount, CouponType type, String message, double price, String image) {
-		setId(id);
-		setName(name);
-		setAmount(amount);
-		setType(type);
-		setMessage(message);
-		setPrice(price);
-		setImage(imageURL);
-	}
-
-	public Coupon(String name, int amount, CouponType type, String message, double price, String image, Date startDate,
-			Date endDate, long companyId) {
+	public CouponDateString(String name, int amount, String type, String message, double price, String image, String startDate,
+			String endDate, long companyId) {
 		setName(name);
 		setAmount(amount);
 		setType(type);
@@ -97,7 +75,7 @@ public class Coupon {
 	 */
 	@Column(nullable = false)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	public Date getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
 
@@ -106,7 +84,7 @@ public class Coupon {
 	 */
 	@Column(nullable = false)
 	@JsonFormat(pattern = "dd-MM-yyyy")
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
@@ -123,8 +101,7 @@ public class Coupon {
 	 * @return the type
 	 */
 	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
-	public CouponType getType() {
+	public String getType() {
 		return type;
 	}
 
