@@ -39,7 +39,7 @@ public class AdminController {
 
 	// http://localhost:8080/admin/createCompany
 	@PostMapping("createCompany")
-	public ResponseEntity<Object> addCompany(@RequestParam String token, @RequestBody Company company) {
+	public ResponseEntity<Object> createCompany(@RequestParam String token, @RequestBody Company company) {
 		return service.createCompany(token,company);
 	}
 

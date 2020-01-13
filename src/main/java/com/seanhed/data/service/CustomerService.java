@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.seanhed.beans.ClientType;
+import com.seanhed.beans.Company;
 import com.seanhed.beans.Coupon;
 import com.seanhed.beans.Customer;
 import com.seanhed.data.repo.CouponRepository;
@@ -40,17 +42,17 @@ public class CustomerService implements CouponClient {
 	public void initDB() {
 		// customerRepository.deleteAll();
 
-//		 Customer customer1 = new Customer("Sean", "1234");
-//		 Customer customer2 = new Customer("Michael", "1234");
-//		 Customer customer3 = new Customer("Tomer", "1234");
-//		 Customer customer4 = new Customer("Aurora", "1234");
-//		 Customer customer5 = new Customer("Maya", "1234");
-//		
-//		 customerRepository.save(customer1);
-//		 customerRepository.save(customer2);
-//		 customerRepository.save(customer3);
-//		 customerRepository.save(customer4);
-//		 customerRepository.save(customer5);
+		// Customer customer1 = new Customer("Sean", "1234");
+		// Customer customer2 = new Customer("Michael", "1234");
+		// Customer customer3 = new Customer("Tomer", "1234");
+		// Customer customer4 = new Customer("Aurora", "1234");
+		// Customer customer5 = new Customer("Maya", "1234");
+		//
+		// customerRepository.save(customer1);
+		// customerRepository.save(customer2);
+		// customerRepository.save(customer3);
+		// customerRepository.save(customer4);
+		// customerRepository.save(customer5);
 	}
 
 	@Override
@@ -109,6 +111,38 @@ public class CustomerService implements CouponClient {
 		}
 	}
 
+	// getAllAvailableCoupons
+	public ResponseEntity<Object> getAllAvailableCoupons(String token) {
+		System.out.println("tokens -> " + tokens);
+		if (tokens.containsKey(token)) {
+			Customer customer = customerRepository.getOne(tokens.get(token));
+			Collection<Coupon> allCoupons = couponRepository.findAll();
+			Collection<Coupon> purchasedCoupons = customer.getCoupons();
+			System.out.println("all coupons before cleaning of purchased - " + allCoupons);
+			for (Coupon coupon : purchasedCoupons) {
+				if (allCoupons.contains(coupon)) {
+					allCoupons.remove(coupon);
+				}
+			}
+			System.out.println("all coupons after cleaning of purchased - " + allCoupons);
+			return ResponseEntity.ok(allCoupons);
+		} else {
+			return ResponseUtil.generateErrorCode(400, "token expired");
+		}
+	}
+
+	// getAllPurchasedCoupons
+	public ResponseEntity<Object> getAllPurchasedCoupons(String token) {
+		System.out.println("tokens -> " + tokens);
+		if (tokens.containsKey(token)) {
+			Customer customer = customerRepository.getOne(tokens.get(token));
+			Collection<Coupon> purchasedCoupons = customer.getCoupons();
+			return ResponseEntity.ok(purchasedCoupons);
+		} else {
+			return ResponseUtil.generateErrorCode(400, "token expired");
+		}
+	}
+
 	// getAllPurchasedByPrice
 	public ResponseEntity<Object> findByPrice(String token, double price) {
 		System.out.println("tokens -> " + tokens);
@@ -120,7 +154,7 @@ public class CustomerService implements CouponClient {
 				System.out.println("retrievedCoupons are ---> " + retrievedCoupons);
 				ArrayList<Coupon> coupons = new ArrayList<>();
 				for (Coupon coupon : retrievedCoupons) {
-					if (retrievedCoupons.iterator().hasNext()) {
+					if (retrievedCoupons.iterator().hasNext() && coupon.getPrice() <= price) {
 						coupons.add(coupon);
 					}
 				}
@@ -140,24 +174,21 @@ public class CustomerService implements CouponClient {
 		}
 	}
 
-	// getAllPurchasedByType
+	// getAllPurchasedByDate
 	public ResponseEntity<Object> findByDate(String token, Date date) {
 		System.out.println("tokens -> " + tokens);
 		if (tokens.containsKey(token)) {
 			try {
-				System.out.println("customerId is -> " + tokens.get(token));
 				Customer customer = customerRepository.getOne(tokens.get(token));
 				Collection<Coupon> retrievedCoupons = customer.getCoupons();
-				System.out.println("retrievedCoupons are ---> " + retrievedCoupons);
-				ArrayList<Coupon> coupons = new ArrayList<>(retrievedCoupons);
-				Collections.sort(coupons, new Comparator<Coupon>() {
-					public int compare(Coupon c1, Coupon c2) {
-						return c1.getEndDate().compareTo(c2.getEndDate());
-					}
-				});
-				System.out.println("coupons after sort -> " + coupons);
-				System.out.println("customers of coupon 1 " + coupons.get(0).getCustomers());
-				return ResponseEntity.ok(coupons);
+				Collection<Coupon> copy = new LinkedList<>();
+				for (Coupon coupon : retrievedCoupons) {
+					copy.add(coupon);
+				}
+				System.out.println("coupons before removeIf -> " + copy);
+				copy.removeIf(coupon -> coupon.getEndDate().before(date));
+				System.out.println("coupons after removeIf -> " + copy);
+				return ResponseEntity.ok(copy);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -166,8 +197,6 @@ public class CustomerService implements CouponClient {
 			return ResponseUtil.generateErrorCode(400, "token expired");
 		}
 	}
-
-	// getAllPurchasedCoupons
 
 	// removeCoupon
 	public ResponseEntity<Object> deleteBoughtCoupon(long customerId, long couponId) {

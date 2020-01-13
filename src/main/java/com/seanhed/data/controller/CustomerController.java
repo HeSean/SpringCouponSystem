@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.seanhed.beans.Coupon;
 import com.seanhed.beans.Customer;
+import com.seanhed.data.repo.CouponRepository;
 import com.seanhed.data.service.CustomerService;
 
 @RestController
@@ -28,12 +29,26 @@ public class CustomerController {
 
 	@Autowired
 	private CustomerService service;
+	
+
 
 	// http://localhost:8080/customer/buyCoupon
 	@PostMapping("/buyCoupon")
 	public ResponseEntity<Object> buyCoupon(@RequestParam String token,
 			@RequestParam long couponId) {
 		return service.buyCoupon(token,couponId);
+	}
+	
+	// http://localhost:8080/customer/getAllAvailableCoupons
+	@GetMapping("/getAllAvailableCoupons")
+	public ResponseEntity<Object> getAllAvailableCoupons(@RequestParam String token) {
+		return service.getAllAvailableCoupons(token);
+	}
+	
+	// http://localhost:8080/customer/getAllPurchasedCoupons
+	@GetMapping("/getAllPurchasedCoupons")
+	public ResponseEntity<Object> getAllPurchasedCoupons(@RequestParam String token) {
+		return service.getAllPurchasedCoupons(token);
 	}
 
 	// http://localhost:8080/customer/getPurchasedCouponByPrice
@@ -48,5 +63,9 @@ public class CustomerController {
 			@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
 		return service.findByDate(token, date);
 	}
+	
+
+	
+	
 
 }

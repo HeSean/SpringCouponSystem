@@ -52,34 +52,33 @@ public class CompanyService implements CouponClient {
 	@PostConstruct
 	public void initDB() {
 		// companyRepository.deleteAll();
-		// Company company1 = new Company("Yesplanet", "1234", "Yesplanet@gmail.com");
-		// Company company2 = new Company("Hagor", "1234", "Hagor@gmail.com");
-		// Company company3 = new Company("Japanika", "1234", "Japanika@gmail.com");
-		//
-		// List<Coupon> coupons = new ArrayList<>();
-		// coupons.add(new Coupon("Seventh Popcorn Free", 5, CouponType.FOOD, "By
-		// YesPlanet", 15, Database.getImageURL(),
-		// Date.from(Database.getStartInstant()), Date.from(Database.getEndInstant())));
-		// coupons.add(new Coupon("1+1 on drinks", 5, CouponType.FOOD, "By YesPlanet",
-		// 15, Database.getImageURL(),
-		// Date.from(Database.getStartInstant()), Date.from(Database.getEndInstant())));
-		// coupons.add(new Coupon("Free Tent with Lederman swiss knife", 5,
-		// CouponType.CAMPING, "By Hagor", 15,
-		// Database.getImageURL(), Date.from(Database.getStartInstant()),
-		// Date.from(Database.getEndInstant())));
-		// coupons.add(new Coupon("Bonus ChickenWing with takeout order", 5,
-		// CouponType.FOOD, "By Japanika", 15,
-		// Database.getImageURL(), Date.from(Database.getStartInstant()),
-		// Date.from(Database.getEndInstant())));
-		//
-		// company1.getCoupons().add(coupons.get(0));
-		// company1.getCoupons().add(coupons.get(1));
-		// company2.getCoupons().add(coupons.get(2));
-		// company3.getCoupons().add(coupons.get(3));
-		//
-		// companyRepository.save(company1);
-		// companyRepository.save(company2);
-		// companyRepository.save(company3);
+//		 Company company1 = new Company("Yesplanet", "1234", "Yesplanet@gmail.com");
+//		 Company company2 = new Company("Hagor", "1234", "Hagor@gmail.com");
+//		 Company company3 = new Company("Japanika", "1234", "Japanika@gmail.com");
+//		
+//		 List<Coupon> coupons = new ArrayList<>();
+//		 coupons.add(new Coupon("Seventh Popcorn Free", 5, CouponType.FOOD, "By YesPlanet", 15, Database.getImageURL(),
+//		 Date.from(Database.getStartInstant()), Date.from(Database.getEndInstant())));
+//		 coupons.add(new Coupon("1+1 on drinks", 5, CouponType.FOOD, "By YesPlanet",
+//		 15, Database.getImageURL(),
+//		 Date.from(Database.getStartInstant()), Date.from(Database.getEndInstant())));
+//		 coupons.add(new Coupon("Free Tent with Lederman swiss knife", 5,
+//		 CouponType.CAMPING, "By Hagor", 15,
+//		 Database.getImageURL(), Date.from(Database.getStartInstant()),
+//		 Date.from(Database.getEndInstant())));
+//		 coupons.add(new Coupon("Bonus ChickenWing with takeout order", 5,
+//		 CouponType.FOOD, "By Japanika", 15,
+//		 Database.getImageURL(), Date.from(Database.getStartInstant()),
+//		 Date.from(Database.getEndInstant())));
+//		
+//		 company1.getCoupons().add(coupons.get(0));
+//		 company1.getCoupons().add(coupons.get(1));
+//		 company2.getCoupons().add(coupons.get(2));
+//		 company3.getCoupons().add(coupons.get(3));
+//		
+//		 companyRepository.save(company1);
+//		 companyRepository.save(company2);
+//		 companyRepository.save(company3);
 	}
 
 	@Override

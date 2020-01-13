@@ -93,7 +93,7 @@ public class AdminService implements CouponClient {
 
 	// createCompany
 	public ResponseEntity<Object> createCompany(String token, Company company) {
-		System.out.println("createCompany -------> " + token);
+		System.out.println("createCompany -------> " + company);
 		if (tokens.containsKey(token)) {
 			if (!company.getName().isEmpty() && !company.getEmail().isEmpty() && !company.getPassword().isEmpty()) {
 				companyRepository.save(company);
@@ -172,6 +172,7 @@ public class AdminService implements CouponClient {
 	// createCustomer
 	public ResponseEntity<Object> createCustomer(String token, Customer customer) {
 		if (tokens.containsKey(token)) {
+			System.out.println("customer details are - "  + customer);
 			customerRepository.save(customer);
 			return ResponseUtil.generateSuccessMessage("added customer");
 		} else {
