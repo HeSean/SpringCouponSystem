@@ -1,6 +1,7 @@
 package com.seanhed.data.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,19 +23,25 @@ import com.seanhed.beans.ClientType;
 import com.seanhed.beans.Company;
 import com.seanhed.beans.Coupon;
 import com.seanhed.beans.Customer;
+import com.seanhed.beans.Income;
+import com.seanhed.beans.IncomeType;
+import com.seanhed.data.dao.CouponClientDAO;
 import com.seanhed.data.repo.CouponRepository;
 import com.seanhed.data.repo.CustomerRepository;
 import com.seanhed.utils.ResponseUtil;
 
 @Service
 @Transactional
-public class CustomerService implements CouponClient {
+public class CustomerService implements CouponClientDAO {
 
 	@Autowired
 	private CustomerRepository customerRepository;
 
 	@Autowired
 	private CouponRepository couponRepository;
+	
+	@Autowired
+	private IncomeService incomeService;
 
 	private Map<String, Long> tokens = new Hashtable<>();
 
@@ -102,6 +109,12 @@ public class CustomerService implements CouponClient {
 			} else {
 				customer.getCoupons().add(coupon);
 				coupon.setAmount(coupon.getAmount() - 1);
+				Income income = new Income();
+				income.setName(customer.getName());
+				income.setAmount(coupon.getPrice());
+				income.setDate(Calendar.getInstance().getTime());
+				income.setDescription(IncomeType.CUSTOMER_PURCHASE);
+				incomeService.storeIncome(income);
 			}
 			couponRepository.save(coupon);
 			customerRepository.save(customer);

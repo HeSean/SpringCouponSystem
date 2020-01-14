@@ -4,9 +4,9 @@ public enum CouponType {
 	Restaurants("Restaurants"), Electricity("Electricity"), Food("Food"), Health("Health"), Sports("Sports"), Camping(
 			"Camping"), Travelling("Travelling");
 
-	private String CouponType;
+	private final String CouponType;
 
-	private CouponType(String value) {
-		this.CouponType = value;
+	private CouponType(String label) {
+		this.CouponType = label;
 	}
 }

@@ -39,17 +39,6 @@ public class Coupon {
 
 	private Collection<Customer> customers = new HashSet<>();
 
-	// // CTOR
-	// public Coupon(String name, int amount, CouponType type, String message,
-	// double price, String image) {
-	// setName(name);
-	// setAmount(amount);
-	// setType(type);
-	// setMessage(message);
-	// setPrice(price);
-	// setImage(imageURL);
-	// }
-
 	// new coupon with specified ID
 	public Coupon(Long id, String name, int amount, CouponType type, String message, double price, String image) {
 		setId(id);

@@ -15,13 +15,14 @@ import org.springframework.stereotype.Service;
 import com.seanhed.beans.ClientType;
 import com.seanhed.beans.Company;
 import com.seanhed.beans.Customer;
+import com.seanhed.data.dao.CouponClientDAO;
 import com.seanhed.data.repo.CompanyRepository;
 import com.seanhed.data.repo.CustomerRepository;
 import com.seanhed.utils.ResponseUtil;
 
 @Service
 @Transactional
-public class AdminService implements CouponClient {
+public class AdminService implements CouponClientDAO {
 	@Autowired
 	private CompanyRepository companyRepository;
 
