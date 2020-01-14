@@ -82,4 +82,10 @@ public class CompanyController {
 	public ResponseEntity<Object> getCouponByType(@RequestParam String token, @RequestParam CouponType type) {
 		return companyService.findByType(token, type);
 	}
+	
+	// http://localhost:8080/admin/getCompanyId
+	@GetMapping("/getCompanyId")
+	public ResponseEntity<Object> getCompanyId(@RequestParam String token) {
+		return companyService.getCompanyId(token);
+	}
 }

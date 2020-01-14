@@ -75,6 +75,8 @@ public class AdminService implements CouponClientDAO {
 		}
 	}
 
+	
+
 	// getAllCompanies
 	public ResponseEntity<Object> getCompanies(String token) {
 		if (tokens.containsKey(token)) {
@@ -134,9 +136,10 @@ public class AdminService implements CouponClientDAO {
 			if (newCompany.getEmail() != null && !(existingCompany.getEmail().equals(newCompany.getEmail()))) {
 				existingCompany.setEmail(newCompany.getEmail());
 			}
-//			if (newCompany.getCoupons() != null && !(existingCompany.getCoupons().equals(newCompany.getCoupons()))) {
-//				existingCompany.setCoupons(newCompany.getCoupons());
-//			}
+			// if (newCompany.getCoupons() != null &&
+			// !(existingCompany.getCoupons().equals(newCompany.getCoupons()))) {
+			// existingCompany.setCoupons(newCompany.getCoupons());
+			// }
 			try {
 				companyRepository.save(existingCompany);
 				System.out.println("updated company is - " + existingCompany);
@@ -173,7 +176,7 @@ public class AdminService implements CouponClientDAO {
 	// createCustomer
 	public ResponseEntity<Object> createCustomer(String token, Customer customer) {
 		if (tokens.containsKey(token)) {
-			System.out.println("customer details are - "  + customer);
+			System.out.println("customer details are - " + customer);
 			customerRepository.save(customer);
 			return ResponseUtil.generateSuccessMessage("added customer");
 		} else {

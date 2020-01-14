@@ -321,5 +321,21 @@ public class CompanyService implements CouponClientDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	// getCompanyId
+		public ResponseEntity<Object> getCompanyId(String token) {
+			System.out.println("tokens -> " + tokens);
+			if (tokens.containsKey(token)) {
+				try {
+					long id = tokens.get(token);
+					System.out.println("token is "+id);
+					return ResponseEntity.ok(id);
+				} catch (Exception e) {
+					return ResponseUtil.generateErrorCode(404, "could not find a company with given ID");
+				}
+			} else {
+				return ResponseUtil.generateErrorCode(400, "token expired");
+			}
+		}
 
 }
