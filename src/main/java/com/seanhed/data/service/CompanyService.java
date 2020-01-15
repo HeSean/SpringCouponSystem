@@ -63,36 +63,35 @@ public class CompanyService implements CouponClientDAO {
 	@PostConstruct
 	public void initDB() {
 		// companyRepository.deleteAll();
-		// Company company1 = new Company("Yesplanet", "1234", "Yesplanet@gmail.com");
-		// Company company2 = new Company("Hagor", "1234", "Hagor@gmail.com");
-		// Company company3 = new Company("Japanika", "1234", "Japanika@gmail.com");
-		//
-		// List<Coupon> coupons = new ArrayList<>();
-		// coupons.add(new Coupon("Seventh Popcorn Free", 5, CouponType.Food, "By
-		// YesPlanet", 15, Database.getImageURL(),
-		// Date.from(Database.getStartInstant()), Date.from(Database.getEndInstant()),
-		// 1));
-		// coupons.add(new Coupon("1+1 on drinks", 5, CouponType.Food, "By YesPlanet",
-		// 15, Database.getImageURL(),
-		// Date.from(Database.getStartInstant()), Date.from(Database.getEndInstant()),
-		// 1));
-		// coupons.add(new Coupon("Free Tent with Lederman swiss knife", 5,
-		// CouponType.Camping, "By Hagor", 15,
-		// Database.getImageURL(), Date.from(Database.getStartInstant()),
-		// Date.from(Database.getEndInstant()), 4));
-		// coupons.add(new Coupon("Bonus ChickenWing with takeout order", 5,
-		// CouponType.Food, "By Japanika", 15,
-		// Database.getImageURL(), Date.from(Database.getStartInstant()),
-		// Date.from(Database.getEndInstant()), 6));
-		//
-		// company1.getCoupons().add(coupons.get(0));
-		// company1.getCoupons().add(coupons.get(1));
-		// company2.getCoupons().add(coupons.get(2));
-		// company3.getCoupons().add(coupons.get(3));
-		//
-		// companyRepository.save(company1);
-		// companyRepository.save(company2);
-		// companyRepository.save(company3);
+//		 Company company1 = new Company("Yesplanet", "1234", "Yesplanet@gmail.com");
+//		 Company company2 = new Company("Hagor", "1234", "Hagor@gmail.com");
+//		 Company company3 = new Company("Japanika", "1234", "Japanika@gmail.com");
+//		
+//		 List<Coupon> coupons = new ArrayList<>();
+//		 coupons.add(new Coupon("Seventh Popcorn Free", 5, CouponType.Food, "By YesPlanet", 15, Database.getImageURL(),
+//		 Date.from(Database.getStartInstant()), Date.from(Database.getEndInstant()),
+//		 1));
+//		 coupons.add(new Coupon("1+1 on drinks", 5, CouponType.Food, "By YesPlanet",
+//		 15, Database.getImageURL(),
+//		 Date.from(Database.getStartInstant()), Date.from(Database.getEndInstant()),
+//		 1));
+//		 coupons.add(new Coupon("Free Tent with Lederman swiss knife", 5,
+//		 CouponType.Camping, "By Hagor", 15,
+//		 Database.getImageURL(), Date.from(Database.getStartInstant()),
+//		 Date.from(Database.getEndInstant()), 4));
+//		 coupons.add(new Coupon("Bonus ChickenWing with takeout order", 5,
+//		 CouponType.Food, "By Japanika", 15,
+//		 Database.getImageURL(), Date.from(Database.getStartInstant()),
+//		 Date.from(Database.getEndInstant()), 6));
+//		
+//		 company1.getCoupons().add(coupons.get(0));
+//		 company1.getCoupons().add(coupons.get(1));
+//		 company2.getCoupons().add(coupons.get(2));
+//		 company3.getCoupons().add(coupons.get(3));
+//		
+//		 companyRepository.save(company1);
+//		 companyRepository.save(company2);
+//		 companyRepository.save(company3);
 	}
 
 	@Override
@@ -321,21 +320,21 @@ public class CompanyService implements CouponClientDAO {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// getCompanyId
-		public ResponseEntity<Object> getCompanyId(String token) {
-			System.out.println("tokens -> " + tokens);
-			if (tokens.containsKey(token)) {
-				try {
-					long id = tokens.get(token);
-					System.out.println("token is "+id);
-					return ResponseEntity.ok(id);
-				} catch (Exception e) {
-					return ResponseUtil.generateErrorCode(404, "could not find a company with given ID");
-				}
-			} else {
-				return ResponseUtil.generateErrorCode(400, "token expired");
+	public ResponseEntity<Object> getCompanyId(String token) {
+		System.out.println("tokens -> " + tokens);
+		if (tokens.containsKey(token)) {
+			try {
+				long id = tokens.get(token);
+				System.out.println("token is " + id);
+				return ResponseEntity.ok(id);
+			} catch (Exception e) {
+				return ResponseUtil.generateErrorCode(404, "could not find a company with given ID");
 			}
+		} else {
+			return ResponseUtil.generateErrorCode(400, "token expired");
 		}
+	}
 
 }

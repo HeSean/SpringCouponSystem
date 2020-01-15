@@ -1,11 +1,7 @@
 package com.seanhed.utils;
 
-import java.time.Clock;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.Date;
-
-import lombok.Data;
 
 public class Database {
 	private static String imageURL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNzrDEfsIOv6mjAECjNOkOZ5I8MWPE13xW9bUO8lYzqZ8cEtVa&s";
@@ -35,4 +31,5 @@ public class Database {
 		System.out.println(date);
 		return date;
 	}
+	
 }

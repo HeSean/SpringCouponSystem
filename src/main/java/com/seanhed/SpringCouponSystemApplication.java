@@ -34,14 +34,8 @@ public class SpringCouponSystemApplication {
 		CouponRepository couponRepository = context.getBean(CouponRepository.class);
 		CustomerRepository customerRepository = context.getBean(CustomerRepository.class);
 
-		List<Coupon> coupons = couponRepository.findAll();
-		List<Customer> customers = customerRepository.findAll();
-
-		// LocalDate localDate = LocalDate.of(2019, 01, 01);
-		// System.out.println("localDate " + localDate);
-
-		System.out.println("Coupons - " + coupons);
-		System.out.println("customers - " + customers);
+		System.out.println("Coupons - " + couponRepository.findAll());
+		System.out.println("Customers - " + customerRepository.findAll());
 		System.out.println("******************");
 	}
 
