@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.seanhed.beans.Company;
 import com.seanhed.beans.Customer;
-import com.seanhed.data.service.AdminService;
+import com.seanhed.data.service.AdminServiceImpl;
 
 @RestController
 @RequestMapping("/admin")
@@ -22,7 +22,7 @@ import com.seanhed.data.service.AdminService;
 public class AdminController {
 	
 	@Autowired
-	private AdminService service;
+	private AdminServiceImpl service;
 
 	// http://localhost:8080/admin/getCompany
 	@GetMapping("/getCompany")

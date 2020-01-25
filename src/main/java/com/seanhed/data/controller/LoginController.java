@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seanhed.beans.ClientType;
-import com.seanhed.data.service.AdminService;
-import com.seanhed.data.service.CompanyService;
-import com.seanhed.data.service.CustomerService;
+import com.seanhed.data.service.AdminServiceImpl;
+import com.seanhed.data.service.CompanyServiceImpl;
+import com.seanhed.data.service.CustomerServiceImpl;
 import com.seanhed.utils.ResponseUtil;
 
 @RestController
@@ -19,13 +19,13 @@ import com.seanhed.utils.ResponseUtil;
 public class LoginController {
 
 	@Autowired
-	private AdminService adminService;
+	private AdminServiceImpl adminService;
 
 	@Autowired
-	private CompanyService companyService;
+	private CompanyServiceImpl companyService;
 
 	@Autowired
-	private CustomerService customerService;
+	private CustomerServiceImpl customerService;
 
 	// http://localhost:8080/login
 	@PostMapping("/login")

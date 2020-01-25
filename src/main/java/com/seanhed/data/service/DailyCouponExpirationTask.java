@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import static com.seanhed.utils.MinLog.*;
 
 import com.seanhed.beans.Coupon;
 import com.seanhed.data.repo.CouponRepository;
@@ -23,23 +24,23 @@ public class DailyCouponExpirationTask{
 	private CouponRepository couponRepository;
 	
 	@Autowired
-	private CompanyService companyService;
+	private CompanyServiceImpl companyService;
 
 	@Scheduled(fixedRate = 500000)
 	public void deleteExpiredCoupons() {
-		System.out.println("************************ DailyTask starting to delete coupons ************************");
+		info("************************ DailyTask starting to delete coupons ************************");
 		try {
 			Collection<Coupon> allCoupons = couponRepository.findAll();
-			System.out.println("allCoupons -> " + allCoupons);
+			info("allCoupons -> " + allCoupons);
 			for (Coupon coupon : allCoupons) {
-				System.out.println("now working on coupon " + coupon.getName());
-				System.out.println("coupons end date is - " + coupon.getEndDate() + " ****** today is - " + Calendar.getInstance().getTime());
+				info("now working on coupon " + coupon.getName());
+				info("coupons end date is - " + coupon.getEndDate() + " ****** today is - " + Calendar.getInstance().getTime());
 				if (coupon.getEndDate().before(Calendar.getInstance().getTime())) {
-					System.out.println("deleting " + coupon.getName());
+					info("deleting " + coupon.getName());
 					companyService.deleteCoupon(coupon);
 				}
 			}
-			System.out.println("************************ DailyTask finished :D ************************");
+			info("************************ DailyTask finished :D ************************");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

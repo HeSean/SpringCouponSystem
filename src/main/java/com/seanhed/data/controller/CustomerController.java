@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.seanhed.beans.Coupon;
 import com.seanhed.beans.Customer;
 import com.seanhed.data.repo.CouponRepository;
-import com.seanhed.data.service.CustomerService;
+import com.seanhed.data.service.CustomerServiceImpl;
 
 @RestController
 @RequestMapping("/customer")
@@ -28,7 +28,7 @@ import com.seanhed.data.service.CustomerService;
 public class CustomerController {
 
 	@Autowired
-	private CustomerService service;
+	private CustomerServiceImpl service;
 	
 
 

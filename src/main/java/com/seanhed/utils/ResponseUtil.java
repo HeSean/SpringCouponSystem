@@ -2,16 +2,15 @@ package com.seanhed.utils;
 
 import java.util.HashMap;
 import java.util.Map;
-
+import static com.seanhed.utils.MinLog.*;
 import org.springframework.http.ResponseEntity;
-
 import com.google.gson.Gson;
 
 public class ResponseUtil {
 
 	public static ResponseEntity<Object> generateSuccessMessage(String message) {
 		Gson gson = new Gson();
-		System.out.println(gson.toJson(message));
+		info(gson.toJson(message));
 		return ResponseEntity.ok().body(gson.toJson(message));
 	}
 

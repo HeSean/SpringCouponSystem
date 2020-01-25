@@ -26,22 +26,24 @@ import com.seanhed.beans.Customer;
 import com.seanhed.beans.Income;
 import com.seanhed.beans.IncomeType;
 import com.seanhed.data.dao.CouponClientDAO;
+import com.seanhed.data.dao.CustomerServiceDAO;
 import com.seanhed.data.repo.CouponRepository;
 import com.seanhed.data.repo.CustomerRepository;
 import com.seanhed.utils.ResponseUtil;
+import static com.seanhed.utils.MinLog.*;
 
 @Service
 @Transactional
-public class CustomerService implements CouponClientDAO {
+public class CustomerServiceImpl implements CustomerServiceDAO, CouponClientDAO {
 
 	@Autowired
 	private CustomerRepository customerRepository;
 
 	@Autowired
 	private CouponRepository couponRepository;
-	
+
 	@Autowired
-	private IncomeService incomeService;
+	private IncomeServiceImpl incomeService;
 
 	private Map<String, Long> tokens = new Hashtable<>();
 
@@ -49,17 +51,17 @@ public class CustomerService implements CouponClientDAO {
 	public void initDB() {
 		// customerRepository.deleteAll();
 
-//		 Customer customer1 = new Customer("Sean", "1234");
-//		 Customer customer2 = new Customer("Michael", "1234");
-//		 Customer customer3 = new Customer("Tomer", "1234");
-//		 Customer customer4 = new Customer("Aurora", "1234");
-//		 Customer customer5 = new Customer("Maya", "1234");
-//		
-//		 customerRepository.save(customer1);
-//		 customerRepository.save(customer2);
-//		 customerRepository.save(customer3);
-//		 customerRepository.save(customer4);
-//		 customerRepository.save(customer5);
+		// Customer customer1 = new Customer("Sean", "1234");
+		// Customer customer2 = new Customer("Michael", "1234");
+		// Customer customer3 = new Customer("Tomer", "1234");
+		// Customer customer4 = new Customer("Aurora", "1234");
+		// Customer customer5 = new Customer("Maya", "1234");
+		//
+		// customerRepository.save(customer1);
+		// customerRepository.save(customer2);
+		// customerRepository.save(customer3);
+		// customerRepository.save(customer4);
+		// customerRepository.save(customer5);
 	}
 
 	@Override
@@ -71,7 +73,7 @@ public class CustomerService implements CouponClientDAO {
 					if (!tokens.containsValue(customer.getId())) {
 						String token = UUID.randomUUID().toString();
 						tokens.put(token, customer.getId());
-						System.out.println("tokens after customer login -> " + tokens);
+						info("tokens after customer login -> " + tokens);
 						return ResponseUtil.generateSuccessMessage(token);
 					} else {
 						return ResponseUtil.generateErrorCode(400, "customer already logged in");
@@ -97,13 +99,14 @@ public class CustomerService implements CouponClientDAO {
 	}
 
 	// purchaseCoupon
+	@Override
 	public ResponseEntity<Object> buyCoupon(String token, long couponID) {
-		System.out.println("tokens -> " + tokens);
+		info("tokens -> " + tokens);
 		if (tokens.containsKey(token)) {
-			System.out.println("1");
+			info("1");
 			Customer customer = customerRepository.getOne(tokens.get(token));
 			Coupon coupon = couponRepository.getOne(couponID);
-			System.out.println("customer ---> " + customer + " , coupon ---> " + coupon);
+			info("customer ---> " + customer + " , coupon ---> " + coupon);
 			if (coupon.getAmount() <= 0) {
 				return ResponseUtil.generateErrorCode(401, "no more coupons left to buy :( ");
 			} else {
@@ -125,19 +128,20 @@ public class CustomerService implements CouponClientDAO {
 	}
 
 	// getAllAvailableCoupons
+	@Override
 	public ResponseEntity<Object> getAllAvailableCoupons(String token) {
-		System.out.println("tokens -> " + tokens);
+		info("tokens -> " + tokens);
 		if (tokens.containsKey(token)) {
 			Customer customer = customerRepository.getOne(tokens.get(token));
 			Collection<Coupon> allCoupons = couponRepository.findAll();
 			Collection<Coupon> purchasedCoupons = customer.getCoupons();
-			System.out.println("all coupons before cleaning of purchased - " + allCoupons);
+			info("all coupons before cleaning of purchased - " + allCoupons);
 			for (Coupon coupon : purchasedCoupons) {
 				if (allCoupons.contains(coupon)) {
 					allCoupons.remove(coupon);
 				}
 			}
-			System.out.println("all coupons after cleaning of purchased - " + allCoupons);
+			info("all coupons after cleaning of purchased - " + allCoupons);
 			return ResponseEntity.ok(allCoupons);
 		} else {
 			return ResponseUtil.generateErrorCode(400, "token expired");
@@ -145,8 +149,9 @@ public class CustomerService implements CouponClientDAO {
 	}
 
 	// getAllPurchasedCoupons
+	@Override
 	public ResponseEntity<Object> getAllPurchasedCoupons(String token) {
-		System.out.println("tokens -> " + tokens);
+		info("tokens -> " + tokens);
 		if (tokens.containsKey(token)) {
 			Customer customer = customerRepository.getOne(tokens.get(token));
 			Collection<Coupon> purchasedCoupons = customer.getCoupons();
@@ -157,14 +162,15 @@ public class CustomerService implements CouponClientDAO {
 	}
 
 	// getAllPurchasedByPrice
+	@Override
 	public ResponseEntity<Object> findByPrice(String token, double price) {
-		System.out.println("tokens -> " + tokens);
+		info("tokens -> " + tokens);
 		if (tokens.containsKey(token)) {
 			try {
-				System.out.println("customerId is -> " + tokens.get(token));
+				info("customerId is -> " + tokens.get(token));
 				Customer customer = customerRepository.getOne(tokens.get(token));
 				Collection<Coupon> retrievedCoupons = customer.getCoupons();
-				System.out.println("retrievedCoupons are ---> " + retrievedCoupons);
+				info("retrievedCoupons are ---> " + retrievedCoupons);
 				ArrayList<Coupon> coupons = new ArrayList<>();
 				for (Coupon coupon : retrievedCoupons) {
 					if (retrievedCoupons.iterator().hasNext() && coupon.getPrice() <= price) {
@@ -176,7 +182,7 @@ public class CustomerService implements CouponClientDAO {
 						return Double.compare(c1.getPrice(), c2.getPrice());
 					}
 				});
-				System.out.println("coupons after sort -> " + coupons);
+				info("coupons after sort -> " + coupons);
 				return ResponseEntity.ok(coupons);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -188,8 +194,9 @@ public class CustomerService implements CouponClientDAO {
 	}
 
 	// getAllPurchasedByDate
+	@Override
 	public ResponseEntity<Object> findByDate(String token, Date date) {
-		System.out.println("tokens -> " + tokens);
+		info("tokens -> " + tokens);
 		if (tokens.containsKey(token)) {
 			try {
 				Customer customer = customerRepository.getOne(tokens.get(token));
@@ -198,9 +205,9 @@ public class CustomerService implements CouponClientDAO {
 				for (Coupon coupon : retrievedCoupons) {
 					copy.add(coupon);
 				}
-				System.out.println("coupons before removeIf -> " + copy);
+				info("coupons before removeIf -> " + copy);
 				copy.removeIf(coupon -> coupon.getEndDate().before(date));
-				System.out.println("coupons after removeIf -> " + copy);
+				info("coupons after removeIf -> " + copy);
 				return ResponseEntity.ok(copy);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -211,11 +218,12 @@ public class CustomerService implements CouponClientDAO {
 		}
 	}
 
-	// removeCoupon
+	// deleteBoughtCoupon
+	@Override
 	public ResponseEntity<Object> deleteBoughtCoupon(long customerId, long couponId) {
 		Customer customer = customerRepository.getOne(customerId);
 		Coupon coupon = couponRepository.getOne(couponId);
-		System.out.println("customer - " + customer + ", coupon - " + coupon);
+		info("customer - " + customer + ", coupon - " + coupon);
 		customer.getCoupons().remove(coupon);
 		customerRepository.save(customer);
 		return ResponseEntity.ok(customer);

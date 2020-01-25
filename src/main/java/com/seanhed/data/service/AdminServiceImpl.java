@@ -15,14 +15,16 @@ import org.springframework.stereotype.Service;
 import com.seanhed.beans.ClientType;
 import com.seanhed.beans.Company;
 import com.seanhed.beans.Customer;
+import com.seanhed.data.dao.AdminServiceDAO;
 import com.seanhed.data.dao.CouponClientDAO;
 import com.seanhed.data.repo.CompanyRepository;
 import com.seanhed.data.repo.CustomerRepository;
 import com.seanhed.utils.ResponseUtil;
+import static com.seanhed.utils.MinLog.*;
 
 @Service
 @Transactional
-public class AdminService implements CouponClientDAO {
+public class AdminServiceImpl implements AdminServiceDAO, CouponClientDAO {
 	@Autowired
 	private CompanyRepository companyRepository;
 
@@ -37,7 +39,7 @@ public class AdminService implements CouponClientDAO {
 			if (password.equals("1234")) {
 				String token = UUID.randomUUID().toString();
 				tokens.put(token, new Random().nextLong());
-				System.out.println("tokens after admin login -> " + tokens);
+				info("tokens after admin login -> " + tokens);
 				return ResponseUtil.generateSuccessMessage(token);
 			}
 		}
@@ -55,19 +57,20 @@ public class AdminService implements CouponClientDAO {
 	}
 
 	// getcompany
+	@Override
 	public ResponseEntity<Object> getCompany(String token, long id) {
-		System.out.println("tokens -> " + tokens);
+		info("tokens -> " + tokens);
 		if (tokens.containsKey(token)) {
 			try {
 				if (id > 0) {
 					Company company = companyRepository.getOne(id);
-					System.out.println("retrevied company -> " + company);
+					info("retrevied company -> " + company);
 					return ResponseEntity.ok(company);
 				} else {
 					return ResponseUtil.generateErrorCode(400, "id must be a positive number");
 				}
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				info(e.getMessage());
 				return ResponseUtil.generateErrorCode(404, "could not find a company with given ID");
 			}
 		} else {
@@ -75,9 +78,8 @@ public class AdminService implements CouponClientDAO {
 		}
 	}
 
-	
-
 	// getAllCompanies
+	@Override
 	public ResponseEntity<Object> getCompanies(String token) {
 		if (tokens.containsKey(token)) {
 			try {
@@ -95,8 +97,9 @@ public class AdminService implements CouponClientDAO {
 	}
 
 	// createCompany
+	@Override
 	public ResponseEntity<Object> createCompany(String token, Company company) {
-		System.out.println("createCompany -------> " + company);
+		info("createCompany -------> " + company);
 		if (tokens.containsKey(token)) {
 			if (!company.getName().isEmpty() && !company.getEmail().isEmpty() && !company.getPassword().isEmpty()) {
 				companyRepository.save(company);
@@ -110,6 +113,7 @@ public class AdminService implements CouponClientDAO {
 	}
 
 	// removeCompany
+	@Override
 	public ResponseEntity<Object> deleteCompany(String token, String name) {
 		if (tokens.containsKey(token)) {
 			try {
@@ -124,6 +128,7 @@ public class AdminService implements CouponClientDAO {
 	}
 
 	// updateCompany
+	@Override
 	public ResponseEntity<Object> updateCompany(String token, long id, Company newCompany) {
 		if (tokens.containsKey(token)) {
 			Company existingCompany = companyRepository.getOne(id);
@@ -136,13 +141,9 @@ public class AdminService implements CouponClientDAO {
 			if (newCompany.getEmail() != null && !(existingCompany.getEmail().equals(newCompany.getEmail()))) {
 				existingCompany.setEmail(newCompany.getEmail());
 			}
-			// if (newCompany.getCoupons() != null &&
-			// !(existingCompany.getCoupons().equals(newCompany.getCoupons()))) {
-			// existingCompany.setCoupons(newCompany.getCoupons());
-			// }
 			try {
 				companyRepository.save(existingCompany);
-				System.out.println("updated company is - " + existingCompany);
+				info("updated company is - " + existingCompany);
 				return ResponseEntity.ok(existingCompany);
 			} catch (Exception e) {
 				return ResponseUtil.generateErrorCode(500, "failed to update company - " + e.getLocalizedMessage());
@@ -153,6 +154,7 @@ public class AdminService implements CouponClientDAO {
 	}
 
 	// getCustomer
+	@Override
 	public ResponseEntity<Object> getCustomer(String token, long id) {
 		if (tokens.containsKey(token)) {
 			Customer customer = customerRepository.getOne(id);
@@ -163,10 +165,11 @@ public class AdminService implements CouponClientDAO {
 	}
 
 	// getAllCustomer
+	@Override
 	public ResponseEntity<Object> getCustomers(String token) {
 		if (tokens.containsKey(token)) {
 			List<Customer> customers = customerRepository.findAll();
-			System.out.println("customer list - " + customers);
+			info("customer list - " + customers);
 			return ResponseEntity.ok(customers);
 		} else {
 			return ResponseUtil.generateErrorCode(400, "token expired");
@@ -174,9 +177,10 @@ public class AdminService implements CouponClientDAO {
 	}
 
 	// createCustomer
+	@Override
 	public ResponseEntity<Object> createCustomer(String token, Customer customer) {
 		if (tokens.containsKey(token)) {
-			System.out.println("customer details are - " + customer);
+			info("customer details are - " + customer);
 			customerRepository.save(customer);
 			return ResponseUtil.generateSuccessMessage("added customer");
 		} else {
@@ -185,6 +189,7 @@ public class AdminService implements CouponClientDAO {
 	}
 
 	// removeCustomer
+	@Override
 	public ResponseEntity<Object> deleteCustomerByName(String token, String name) {
 		if (tokens.containsKey(token)) {
 			customerRepository.deleteByName(name);
@@ -192,10 +197,10 @@ public class AdminService implements CouponClientDAO {
 		} else {
 			return ResponseUtil.generateErrorCode(400, "token expired");
 		}
-
 	}
 
 	// updateCustomer
+	@Override
 	public ResponseEntity<Object> updateCustomer(String token, long id, Customer newCustomer) {
 		if (tokens.containsKey(token)) {
 			Customer existingCustomer = customerRepository.getOne(id);
@@ -210,7 +215,7 @@ public class AdminService implements CouponClientDAO {
 				existingCustomer.setPassword(newCustomer.getPassword());
 			}
 			customerRepository.save(existingCustomer);
-			System.out.println("updatedCustomer is - " + existingCustomer);
+			info("updatedCustomer is - " + existingCustomer);
 			return ResponseEntity.ok(existingCustomer);
 		} else {
 			return ResponseUtil.generateErrorCode(400, "token expired");

@@ -1,11 +1,5 @@
 package com.seanhed;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -13,14 +7,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import com.seanhed.beans.Coupon;
-import com.seanhed.beans.CouponType;
-import com.seanhed.beans.Customer;
-import com.seanhed.data.repo.CompanyRepository;
 import com.seanhed.data.repo.CouponRepository;
 import com.seanhed.data.repo.CustomerRepository;
-import com.seanhed.data.service.CustomerService;
-import com.seanhed.utils.Database;
+import static com.seanhed.utils.MinLog.*;
 
 @SpringBootApplication(scanBasePackages = "com.seanhed")
 @EnableJpaRepositories("com.seanhed")
@@ -30,13 +19,13 @@ public class SpringCouponSystemApplication {
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(SpringCouponSystemApplication.class, args);
-		System.out.println("Go!");
+		info("Go!");
 		CouponRepository couponRepository = context.getBean(CouponRepository.class);
 		CustomerRepository customerRepository = context.getBean(CustomerRepository.class);
 
-		System.out.println("Coupons - " + couponRepository.findAll());
-		System.out.println("Customers - " + customerRepository.findAll());
-		System.out.println("******************");
+		info("Coupons - " + couponRepository.findAll());
+		info("Customers - " + customerRepository.findAll());
+		info("******************");
 	}
 
 }

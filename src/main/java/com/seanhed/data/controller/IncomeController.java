@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.seanhed.data.service.IncomeService;
+import com.seanhed.data.service.IncomeServiceImpl;
 
 @RestController
 @RequestMapping("/income")
@@ -16,7 +16,7 @@ import com.seanhed.data.service.IncomeService;
 public class IncomeController {
 
 	@Autowired
-	private IncomeService service;
+	private IncomeServiceImpl service;
 
 	// http://localhost:8080/income/viewAllIncome
 	@GetMapping("/viewAllIncome")

@@ -21,7 +21,7 @@ import com.seanhed.beans.Coupon;
 import com.seanhed.beans.CouponDateString;
 import com.seanhed.beans.CouponType;
 import com.seanhed.beans.Customer;
-import com.seanhed.data.service.CompanyService;
+import com.seanhed.data.service.CompanyServiceImpl;
 import com.seanhed.utils.ResponseUtil;
 
 @RestController
@@ -30,7 +30,7 @@ import com.seanhed.utils.ResponseUtil;
 public class CompanyController {
 
 	@Autowired
-	private CompanyService companyService;
+	private CompanyServiceImpl companyService;
 
 	// http://localhost:8080/company/getCoupon
 	@GetMapping("/getCoupon")
@@ -47,11 +47,7 @@ public class CompanyController {
 	// http://localhost:8080/company/createCoupon
 	@PostMapping("createCoupon")
 	public ResponseEntity<Object> createCoupon(@RequestParam String token, @RequestBody CouponDateString coupon) {
-		try {
-			return companyService.createCoupon(token, coupon);
-		} catch (ParseException e) {
-			return ResponseUtil.generateErrorCode(404, "failed to parse date");
-		}
+		return companyService.createCoupon(token, coupon);
 	}
 
 	// http://localhost:8080/company/deleteCoupon
@@ -69,12 +65,8 @@ public class CompanyController {
 	// http://localhost:8080/company/updateCoupon
 	@PutMapping("/updateCoupon")
 	public ResponseEntity<Object> updateCoupon(@RequestParam String token, @RequestParam long couponId,
-			@RequestBody CouponDateString coupon)  {
-		try {
-			return companyService.updateCoupon(token, couponId, coupon);
-		} catch (ParseException e) {
-			return ResponseUtil.generateErrorCode(404, "failed to parse date");
-		}
+			@RequestBody CouponDateString coupon) {
+		return companyService.updateCoupon(token, couponId, coupon);
 	}
 
 	// http://localhost:8080/company/getCouponByType
@@ -82,7 +74,7 @@ public class CompanyController {
 	public ResponseEntity<Object> getCouponByType(@RequestParam String token, @RequestParam CouponType type) {
 		return companyService.findByType(token, type);
 	}
-	
+
 	// http://localhost:8080/admin/getCompanyId
 	@GetMapping("/getCompanyId")
 	public ResponseEntity<Object> getCompanyId(@RequestParam String token) {

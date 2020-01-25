@@ -9,15 +9,6 @@ public class IncorrectCredentialsException extends Exception {
 
 	public IncorrectCredentialsException(String msg) {
 		super(msg);
-		//this.msg = msg;
 	}
-
-//	@Override
-//	public String toString() {
-//		if (msg != null) {
-//			return "IncorrectCredentialsException - " + msg;
-//		} else
-//			return "IncorrectCredentialsException - No objects were found.";
-//	}
 
 }
